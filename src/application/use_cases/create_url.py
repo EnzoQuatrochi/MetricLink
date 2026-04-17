@@ -18,3 +18,4 @@ class CreateUrl:
         self.repository.save_url(newUrl)
 
         return newUrl
+        
