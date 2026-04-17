@@ -22,4 +22,4 @@ class RedirectUrl:
         
         else:
 
-            raise UrlNotFoundError()
+            raise UrlNotFoundError(slug)
