@@ -1,5 +1,4 @@
 from datetime import date
-from domain.entities.url import Url
 from domain.repositories.metric_repository import MetricsRepository
 
 class FakeMetricRepository(MetricsRepository):
