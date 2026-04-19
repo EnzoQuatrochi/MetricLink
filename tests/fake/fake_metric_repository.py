@@ -31,13 +31,11 @@ class FakeMetricRepository(MetricsRepository):
 
         return self.metrics[slug]["clicks"]
 
-    def get_clicks_per_day(self, slug, day):
+    def get_clicks_per_day(self, slug: str, day: date) -> int:
 
-        today = date.today().isoformat()
+        if day in self.metrics[slug]["clicks_per_day"]:
 
-        if today in self.metrics[slug]["clicks_per_day"]:
-
-            return self.metrics[slug]["clicks_per_day"]
+            return self.metrics[slug]["clicks_per_day"][day]
 
         else:
 
