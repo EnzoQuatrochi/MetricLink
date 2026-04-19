@@ -1,5 +1,5 @@
 from datetime import date
-from domain.repositories.metric_repository import MetricsRepository
+from src.domain.repositories.metric_repository import MetricsRepository
 
 class FakeMetricRepository(MetricsRepository):
 
