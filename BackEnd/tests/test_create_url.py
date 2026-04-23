@@ -1,7 +1,7 @@
-from fake.fake_repository_url import FakeUrlRepository
+from fake.fake_url_repository import FakeUrlRepository
 from datetime import datetime, timedelta
-from application.use_cases.create_url import CreateUrl
-from domain.entities.url import Url
+from src.application.use_cases.create_url import CreateUrl
+from src.domain.entities.url import Url
 
 def test_create_url_valid():
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from domain.entities.url import Url
+from src.domain.entities.url import Url
 
 class UrlRepository(ABC):
 

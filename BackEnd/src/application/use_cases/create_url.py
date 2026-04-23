@@ -1,6 +1,6 @@
 import secrets
-from domain.entities.url import Url
-from domain.repositories.url_repository import UrlRepository
+from src.domain.entities.url import Url
+from src.domain.repositories.url_repository import UrlRepository
 from datetime import date
 
 class CreateUrl:
