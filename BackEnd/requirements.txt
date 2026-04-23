@@ -1,4 +1,4 @@
 pytest
 ruff
-psycopg2-binary
+psycopg[binary,pool]
 python-dotenv

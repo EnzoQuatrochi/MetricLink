@@ -1,6 +1,6 @@
-from domain.entities.url import Url
-from domain.exceptions.url_exceptions import ExpiredUrlError, UrlNotFoundError
-from domain.repositories.url_repository import UrlRepository
+from src.domain.entities.url import Url
+from src.domain.exceptions.url_exceptions import ExpiredUrlError, UrlNotFoundError
+from src.domain.repositories.url_repository import UrlRepository
 
 class RedirectUrl:
 

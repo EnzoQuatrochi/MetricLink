@@ -1,4 +1,4 @@
-from domain.repositories.metric_repository import MetricsRepository
+from src.domain.repositories.metric_repository import MetricsRepository
 from datetime import date
 
 class GetMetrics:
