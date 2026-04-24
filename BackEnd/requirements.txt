@@ -2,3 +2,6 @@ pytest
 ruff
 psycopg[binary,pool]
 python-dotenv
+fastapi[standard]
+uvicorn
+pydantic
