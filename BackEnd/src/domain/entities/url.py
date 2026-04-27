@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 class Url():
 
@@ -7,9 +7,14 @@ class Url():
         self.original_url = original_url
         self.slug = slug
         self.created_at = datetime.now()
-        self.expires_at = datetime.fromisoformat(expires_at)
+
+        if isinstance(expires_at, datetime):
+            self.expires_at = expires_at
+
+        else:
+            self.expires_at = datetime.fromisoformat(str(expires_at))
 
     def is_expired(self) -> bool: 
         
         return datetime.now() > self.expires_at
-    
+        

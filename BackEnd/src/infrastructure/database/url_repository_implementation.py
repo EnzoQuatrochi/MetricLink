@@ -28,7 +28,7 @@ class UrlRepositoryImplementation(UrlRepository):
 
                 return None
 
-            return Url(original_url=row[1], slug=row[2], expires_at=row[4])
+            return Url(original_url=row[2], slug=row[1], expires_at=row[4])
 
     def delete_url(self, slug: str) -> None:
         
