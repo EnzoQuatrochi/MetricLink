@@ -12,14 +12,14 @@ class MetricRepositoryImplementation(MetricsRepository):
 
         with self.connection.cursor() as cursor:
 
-            cursor.execute("INSERT INTO metrics (slug) VALUES %s", (slug,))
+            cursor.execute("INSERT INTO metrics (slug) VALUES (%s)", (slug,))
             self.connection.commit()
 
     def get_all_clicks(self, slug: str) -> int:
 
         with self.connection.cursor() as cursor:
 
-            cursor.execute("SELECT COUNT(*) FROM metrics WHERE slug = %s", (slug,))
+            cursor.execute("SELECT COUNT(*) FROM metrics WHERE slug = (%s)", (slug,))
             row = cursor.fetchone()
 
             return row[0]
@@ -28,7 +28,7 @@ class MetricRepositoryImplementation(MetricsRepository):
         
         with self.connection.cursor() as cursor:
 
-            cursor.execute("SELECT COUNT(*) FROM metrics WHERE slug = %s AND DATE(clicked_at) = %s", (slug, day,))
+            cursor.execute("SELECT COUNT(*) FROM metrics WHERE slug = (%s) AND DATE(clicked_at) = (%s)", (slug, day,))
             row = cursor.fetchone()
 
             return row[0]
