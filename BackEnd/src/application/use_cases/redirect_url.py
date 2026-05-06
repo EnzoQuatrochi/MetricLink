@@ -1,5 +1,4 @@
 from datetime import datetime
-from src.domain.entities.url import Url
 from src.domain.exceptions.url_exceptions import ExpiredUrlError, UrlNotFoundError
 from src.domain.repositories.url_repository import UrlRepository
 from src.infrastructure.cache.cache_service import CacheService
