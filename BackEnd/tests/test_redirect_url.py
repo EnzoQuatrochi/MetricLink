@@ -3,7 +3,7 @@ from src.domain.entities.url import Url
 from src.domain.exceptions.url_exceptions import ExpiredUrlError, UrlNotFoundError
 from fake.fake_url_repository import FakeUrlRepository
 from src.application.use_cases.redirect_url import RedirectUrl
-from src.infrastructure.cache.cache_service import CacheService, get_connection
+from fake.fake_cache_service import FakeCacheService
 import pytest
 
 def test_valid_redirect_url():
@@ -13,7 +13,7 @@ def test_valid_redirect_url():
 
     fakeRepository = FakeUrlRepository()
     fakeRepository.save_url(fake_url)
-    cache = CacheService(get_connection())
+    cache = FakeCacheService()
     redirect_use_case = RedirectUrl(fakeRepository, cache)
 
     result = redirect_use_case.execute(slug="test1")
@@ -27,7 +27,7 @@ def test_expired_redirect_url():
 
     fakeRepository = FakeUrlRepository()
     fakeRepository.save_url(fake_url)
-    cache = CacheService(get_connection())
+    cache = FakeCacheService()
     redirect_use_case = RedirectUrl(fakeRepository, cache)
 
     with pytest.raises(ExpiredUrlError):
@@ -37,7 +37,7 @@ def test_expired_redirect_url():
 def test_invalid_redirect_url():
 
     fakeRepository = FakeUrlRepository()
-    cache = CacheService(get_connection())
+    cache = FakeCacheService()
     redirect_use_case = RedirectUrl(fakeRepository, cache)
     
     with pytest.raises(UrlNotFoundError):
