@@ -8,6 +8,7 @@ from src.application.use_cases.redirect_url import RedirectUrl
 from src.infrastructure.http.schemas import CreateUrlRequest, UrlResponse
 from src.infrastructure.database.metric_repository_implementation import MetricRepositoryImplementation
 from src.infrastructure.database.url_repository_implementation import UrlRepositoryImplementation
+from src.infrastructure.cache.cache_service import CacheService, get_connection
 
 router = APIRouter()
 
@@ -28,14 +29,16 @@ def redirect_url(slug: str):
     
     repository = UrlRepositoryImplementation()
 
-    use_case = RedirectUrl(repository)
+    cache = CacheService(get_connection())
 
-    url = use_case.execute(slug)
+    use_case = RedirectUrl(repository, cache)
+
+    original_url = use_case.execute(slug)
 
     metric_repository = MetricRepositoryImplementation()
     metric_repository.register_click(slug)
 
-    return RedirectResponse(url=url.original_url, status_code=302)
+    return RedirectResponse(url=original_url, status_code=302)
 
 @router.get("/urls/{slug}/metrics")
 def get_metrics(slug: str, day: date):
