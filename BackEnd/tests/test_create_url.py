@@ -8,7 +8,7 @@ def test_create_url_valid():
     fakeUrl = FakeUrlRepository()
     create_url_use_case = CreateUrl(fakeUrl)
 
-    expires_at = (datetime.now() + timedelta(days=30)).isoformat()
+    expires_at = (datetime.now() + timedelta(days=30)).date()
 
     newUrl = create_url_use_case.execute("https://google.com", expires_at)
 
@@ -16,3 +16,16 @@ def test_create_url_valid():
     assert newUrl.original_url == "https://google.com"
     assert newUrl.slug is not None
     assert len(newUrl.slug) > 0
+
+def test_create_url_expires_capped_at_30_days():
+
+    fakeUrl = FakeUrlRepository()
+    create_url_use_case = CreateUrl(fakeUrl)
+
+    expires_at = (datetime.now() + timedelta(days=60)).date()
+
+    newUrl = create_url_use_case.execute("https://google.com", expires_at)
+
+    max_expires = (datetime.now() + timedelta(days=30)).date()
+
+    assert newUrl.expires_at.date() <= max_expires
