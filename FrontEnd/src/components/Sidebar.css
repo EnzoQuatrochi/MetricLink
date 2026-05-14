@@ -1,0 +1,21 @@
+.sidebar{
+    position: absolute;
+    border-right: 1px solid black;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 60%);
+    height: 100vh;
+    width: 250px;
+}
+
+.urlSidebarCard{
+    border: 1px solid black;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 60%);
+    border-radius: 7px;
+    margin-bottom: 9px;
+    padding: 3px 7px;
+    height: auto;
+    margin: 10px;
+}
+
+.urlSidebarCard p{
+    font-size: 15px;
+}
