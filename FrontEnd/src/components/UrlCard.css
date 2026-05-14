@@ -8,23 +8,54 @@ body, html {
     padding: 0;
 }
 
-.form{
+.urlCard{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.topButton{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.backButton{
+    margin: 25px;
+    padding: 8px 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
+    font-size: 18px;
+    background-color: #aed6fc;
+    border-radius: 5px;
+    width: 110px;
+    flex-shrink: 0;
+}
+
+.formPosition{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_form{
     border: 2px solid black;
-    max-width: 30%;
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 70%);
+    width: 440px;
+    flex-shrink: 0;
 }
 
-h1{
+.card_form h1{
     font-size: 40px;
-    margin-top: 20px;
+    margin-top: 35px;
     margin-bottom: 20px;
 }
 
-p{
+.card_form p{
     margin: 3px;
     font-size: 18px;
 }
@@ -40,7 +71,6 @@ p{
     font-size: 18px;
     border-radius: 5px;
     margin: 20px 0;
-    margin-top: 30px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
 }
 
@@ -50,6 +80,5 @@ p{
     font-size: 18px;
     border-radius: 5px;
     margin: 20px 0;
-    margin-top: 30px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
 }

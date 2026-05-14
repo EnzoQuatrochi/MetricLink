@@ -1,7 +1,7 @@
 import type { Url, Metrics } from "../types";
 import axios from "axios";
 
-const BASE_URL = "http://127.0.0.1:8000/";
+const BASE_URL = "http://127.0.0.1:8000";
 
 export async function createUrl(originalUrl: string, expires_at: string): Promise<Url> {
 
