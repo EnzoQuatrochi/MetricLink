@@ -40,3 +40,16 @@ class FakeMetricRepository(MetricsRepository):
         else:
 
             return 0
+        
+    def get_clicks_history(self, slug: str) -> list:
+
+        if slug not in self.metrics:
+
+            return []
+        
+        else:
+
+            return [
+                (day, count) 
+                for day, count in self.metrics[slug]["clicks_per_day"].items()
+            ]

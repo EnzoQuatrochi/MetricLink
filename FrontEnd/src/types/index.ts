@@ -9,3 +9,8 @@ export interface Metrics {
     total_clicks: number
     clicks_per_day: number
 }
+
+export interface MetricsHistory {
+    total_clicks: number
+    history: { day: string, clicks: number}[]
+}

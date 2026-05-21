@@ -19,3 +19,7 @@ class GetMetrics:
 
         return metrics
     
+    def get_clicks_history(self, slug: str) -> list:
+
+        return self.repository.get_clicks_history(slug)
+    
