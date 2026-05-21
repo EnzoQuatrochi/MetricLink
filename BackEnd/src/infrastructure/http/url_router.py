@@ -52,6 +52,18 @@ def get_metrics(slug: str, day: date):
         "clicks_per_day": use_case.get_clicks_per_day(slug, day)
     }
 
+@router.get("/urls/{slug}/history")
+def get_metrics_history(slug: str):
+
+    repository = MetricRepositoryImplementation()
+
+    use_case = GetMetrics(repository)
+
+    return {
+        "total_clicks": use_case.get_total_clicks(slug),
+        "history": use_case.get_clicks_history(slug)
+    }
+
 @router.delete("/urls/{slug}")
 def delete_url(slug: str) -> None:
 

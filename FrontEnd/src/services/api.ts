@@ -1,4 +1,4 @@
-import type { Url, Metrics } from "../types";
+import type { Url, Metrics, MetricsHistory } from "../types";
 import axios from "axios";
 
 const BASE_URL = "http://127.0.0.1:8000";
@@ -25,6 +25,16 @@ export async function getMetrics(slug: string, day: string): Promise<Metrics> {
         params: {
             day: day,
         }
+    })
+
+    return response.data
+}
+
+export async function getMetricsHistory(slug: string): Promise<MetricsHistory> {
+
+    const response = await axios({
+        method: 'get',
+        url: `${BASE_URL}/urls/${slug}/history`,
     })
 
     return response.data

@@ -32,3 +32,12 @@ class MetricRepositoryImplementation(MetricsRepository):
             row = cursor.fetchone()
 
             return row[0]
+        
+    def get_clicks_history(self, slug) -> list:
+
+        with self.connection.cursor() as cursor:
+
+            cursor.execute("SELECT DATE(clicked_at), COUNT(*) FROM metrics WHERE slug = %s GROUP BY DATE(clicked_at) ORDER BY DATE(clicked_at)", (slug,))
+            row = cursor.fetchall()
+
+        return [{"day": str(row[0]), "clicks": row[1]} for row in row]

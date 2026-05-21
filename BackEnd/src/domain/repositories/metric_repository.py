@@ -17,3 +17,9 @@ class MetricsRepository(ABC):
     def get_clicks_per_day(self, slug: str, day: date) -> int:
 
         pass
+    
+    @abstractmethod
+    def get_clicks_history(self, slug: str) -> list:
+
+        pass
+    
