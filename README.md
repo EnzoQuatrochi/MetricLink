@@ -107,21 +107,21 @@ The API runs by default at **http://127.0.0.1:8000**.
 The backend follows **Clean Architecture** in layers: business rules at the center, use cases in the application layer, and technical details (HTTP, PostgreSQL, Redis) in infrastructure. It applies **Clean Code** principles: dependencies point inward, each use case has a single responsibility, and the domain does not know about FastAPI or the database.
 
 ```
-┌─────────────────────────────────────────────────────────┐
+┌────────────────────────────────────────────────────────────┐
 │  infrastructure/http     FastAPI, routes, Pydantic schemas │
-│  infrastructure/database PostgreSQL repositories          │
-│  infrastructure/cache    Redis (CacheService)             │
-└───────────────────────────┬─────────────────────────────┘
+│  infrastructure/database PostgreSQL repositories           │
+│  infrastructure/cache    Redis (CacheService)              │
+└───────────────────────────┬────────────────────────────────┘
                             │ depends on
-┌───────────────────────────▼─────────────────────────────┐
-│  application/use_cases   CreateUrl, RedirectUrl,          │
-│                          GetMetrics, DeleteUrl            │
-└───────────────────────────┬─────────────────────────────┘
+┌───────────────────────────▼────────────────────────────────┐
+│  application/use_cases   CreateUrl, RedirectUrl,           │
+│                          GetMetrics, DeleteUrl             │
+└───────────────────────────┬────────────────────────────────┘
                             │ depends on
-┌───────────────────────────▼─────────────────────────────┐
-│  domain/                 Url (entity), UrlRepository,     │
-│                          MetricRepository, exceptions     │
-└─────────────────────────────────────────────────────────┘
+┌───────────────────────────▼────────────────────────────────┐
+│  domain/                 Url (entity), UrlRepository,      │
+│                          MetricRepository, exceptions      │
+└────────────────────────────────────────────────────────────┘
 ```
 
 **Main use cases:**
@@ -129,7 +129,7 @@ The backend follows **Clean Architecture** in layers: business rules at the cent
 | Use case      | Responsibility                                                                 |
 |---------------|--------------------------------------------------------------------------------|
 | `CreateUrl`   | Generates a secure slug, caps expiration at 30 days, and saves the URL         |
-| `RedirectUrl` | Reads Redis cache; if missing, queries the DB, validates expiration, caches  |
+| `RedirectUrl` | Reads Redis cache; if missing, queries the DB, validates expiration, caches    |
 | `GetMetrics`  | Total clicks, clicks per day, and history                                      |
 | `DeleteUrl`   | Removes a URL by slug                                                          |
 
