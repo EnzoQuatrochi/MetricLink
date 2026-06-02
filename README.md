@@ -23,7 +23,7 @@ This repository is a **monorepo**: the frontend and backend live in the same Git
 - [Monorepo structure](#monorepo-structure)
 - [Technologies](#technologies)
 - [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
+- [Pre-requisites](#pre-requisites)
 - [Running the project locally](#running-the-project-locally)
 - [Deployment](#deployment)
 - [REST API](#rest-api)
@@ -160,7 +160,7 @@ The backend is accessed via `FrontEnd/src/services/api.ts`, which points to `htt
 
 ---
 
-## Prerequisites
+## Pre-requisites
 
 - [Node.js](https://nodejs.org/) (LTS recommended) — frontend
 - [Python 3.12+](https://www.python.org/) — backend
