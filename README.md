@@ -6,14 +6,26 @@ This repository is a **monorepo**: the frontend and backend live in the same Git
 
 ---
 
+## Live demo
+
+| Layer    | URL                                                                 |
+|----------|---------------------------------------------------------------------|
+| Frontend | **https://metric-link.vercel.app/** (Vercel)                        |
+| Backend  | **https://metriclink.duckdns.org** (Oracle Cloud VM — Ubuntu 24)    |
+| API docs | **https://metriclink.duckdns.org/docs**                             |
+
+---
+
 ## Table of contents
 
+- [Live demo](#live-demo)
 - [Overview](#overview)
 - [Monorepo structure](#monorepo-structure)
 - [Technologies](#technologies)
 - [Architecture](#architecture)
 - [Prerequisites](#prerequisites)
-- [Running the project](#running-the-project)
+- [Running the project locally](#running-the-project-locally)
+- [Deployment](#deployment)
 - [REST API](#rest-api)
 - [Tests](#tests)
 - [CI/CD](#cicd)
@@ -31,7 +43,7 @@ Typical flow:
 
 1. The user enters a long URL and an expiration date in the frontend.
 2. The backend generates a random **slug**, persists it in PostgreSQL, and returns the short link.
-3. When visiting `http://localhost:8000/{slug}`, the backend redirects and records the click.
+3. When visiting `https://metriclink.duckdns.org/{slug}`, the backend redirects and records the click.
 4. The frontend shows charts and totals by calling the metrics endpoints.
 
 ---
@@ -80,7 +92,7 @@ MetricLink/
 | **Recharts**     | Per-day click charts                               |
 | **ESLint**       | TypeScript/React linting                           |
 
-The frontend runs by default at **http://localhost:5173**.
+Deployed at **https://metric-link.vercel.app/** via [Vercel](https://vercel.com/).
 
 ### Backend (`BackEnd/`)
 
@@ -96,7 +108,7 @@ The frontend runs by default at **http://localhost:5173**.
 | **pytest**       | Automated tests                                    |
 | **Ruff**         | Python linter                                      |
 
-The API runs by default at **http://127.0.0.1:8000**.
+Deployed at **https://metriclink.duckdns.org** on an Oracle Cloud free-tier VM.
 
 ---
 
@@ -144,7 +156,7 @@ In the domain, contracts such as `UrlRepository` enable **dependency inversion**
 - **`/` (Home):** form to shorten URLs, sidebar with created links (stored in `localStorage`), and a card with the selected link details.
 - **`/metrics/:slug` (Metrics):** metrics page with totals, per-day list, and chart (Recharts).
 
-The backend is accessed via `FrontEnd/src/services/api.ts`, which points to `http://127.0.0.1:8000`. API CORS is configured to accept requests from `http://localhost:5173`.
+The backend is accessed via `FrontEnd/src/services/api.ts`, which points to `https://metriclink.duckdns.org` in production and `http://127.0.0.1:8000` in local development.
 
 ---
 
@@ -157,7 +169,7 @@ The backend is accessed via `FrontEnd/src/services/api.ts`, which points to `htt
 
 ---
 
-## Running the project
+## Running the project locally
 
 ### 1. Clone the repository
 
@@ -217,7 +229,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/your_database
 REDIS_URL=redis://localhost:6379/0
 ```
 
-> **Note:** `REDIS_URL` is required for the redirect cache service. Make sure Redis is running.
+> **Note:** `REDIS_URL` is required for the redirect cache service. Make sure Redis is running locally.
 
 Start the API:
 
@@ -229,6 +241,12 @@ Interactive API docs (Swagger): **http://127.0.0.1:8000/docs**
 
 ### 4. Set up the frontend
 
+In `FrontEnd/src/services/api.ts`, set the base URL to your local backend:
+
+```typescript
+const BASE_URL = "http://127.0.0.1:8000"
+```
+
 In another terminal, in the `FrontEnd/` folder:
 
 ```bash
@@ -237,7 +255,30 @@ npm install
 npm run dev
 ```
 
+The app will be available at **http://localhost:5173**.
+
 ---
+
+## Deployment
+
+The production setup uses an **Oracle Cloud free-tier VM** for the backend and **Vercel** for the frontend.
+
+### Infrastructure overview
+
+```
+Browser
+   │
+   ├── https://metric-link.vercel.app     → Vercel (React SPA)
+   │                                           │
+   │                                           │ API calls
+   │                                           ▼
+   └── https://metriclink.duckdns.org     → Oracle VM (Ubuntu 24)
+                                               ├── Nginx (reverse proxy + TLS)
+                                               ├── Uvicorn / FastAPI (port 8000)
+                                               ├── PostgreSQL
+                                               └── Redis
+```
+
 
 ## REST API
 
@@ -248,6 +289,8 @@ npm run dev
 | `GET`    | `/urls/{slug}/metrics` | Metrics for a day (`day` as query param)           |
 | `GET`    | `/urls/{slug}/history` | Total and per-day click history                    |
 | `DELETE` | `/urls/{slug}`         | Remove URL by slug                                 |
+
+Full interactive documentation at **https://metriclink.duckdns.org/docs**.
 
 ---
 
@@ -272,13 +315,13 @@ BackEnd/tests/
 
 ### What is tested
 
-| File                   | Focus                                                          |
-|------------------------|----------------------------------------------------------------|
-| `test_create_url.py`   | Slug generated, URL persisted, expiration capped at 30 days    |
-| `test_redirect_url.py` | Original URL returned, `ExpiredUrlError`, `UrlNotFoundError`   |
-| `test_get_metrics.py`  | Total count, clicks per day, and date filter                   |
-| `test_url.py`          | `Url.is_expired()` for valid and expired links                 |
-| `test_url_exceptions.py` | Domain exception types and messages                          |
+| File                     | Focus                                                          |
+|--------------------------|----------------------------------------------------------------|
+| `test_create_url.py`     | Slug generated, URL persisted, expiration capped at 30 days    |
+| `test_redirect_url.py`   | Original URL returned, `ExpiredUrlError`, `UrlNotFoundError`   |
+| `test_get_metrics.py`    | Total count, clicks per day, and date filter                   |
+| `test_url.py`            | `Url.is_expired()` for valid and expired links                 |
+| `test_url_exceptions.py` | Domain exception types and messages                            |
 
 ### Fakes
 
@@ -323,5 +366,7 @@ The workflow in `.github/workflows/ci.yml` runs on push/PR to the `main` and `de
 3. Install `BackEnd/requirements.txt`
 4. **Ruff** (`ruff check .`)
 5. **pytest** (working directory: `BackEnd`)
+
+The frontend is continuously deployed by Vercel on every push to `main`.
 
 ---

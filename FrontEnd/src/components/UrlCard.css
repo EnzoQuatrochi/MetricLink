@@ -55,9 +55,15 @@ body, html {
     margin-bottom: 20px;
 }
 
-.card_form p{
+.card_form {
     margin: 3px;
     font-size: 18px;
+}
+
+.urlCardNotice {
+    color: #c62828;
+    font-size: 20px;
+    margin-top: 15px;
 }
 
 .url-card-buttons{

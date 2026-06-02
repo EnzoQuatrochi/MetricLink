@@ -14,8 +14,23 @@
     padding: 3px 7px;
     height: auto;
     margin: 10px;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .urlSidebarCard p{
     font-size: 15px;
+}
+
+.urlSidebarCard .urlOriginal {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.sidebarTitle {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
 }

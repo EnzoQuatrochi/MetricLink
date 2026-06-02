@@ -23,17 +23,17 @@ export default function Metrics() {
     return (
         <div className="metrics">
             <div className='topButton'>
-                <button className="backButton" onClick={() => navigate(-1)}>🠔 Voltar</button>
+                <button className="backButton" onClick={() => navigate(-1)}>🠔 Back</button>
             </div>
             <div className='metricsCard'>
                 <div className='h1'>
-                    <h1>Métricas de {slug}</h1>
+                    <h1>Metrics from {slug}</h1>
                 </div>
                 {metrics ? (
                     <>
                         <div className='metricsData'>
-                            <p>Total de Clicks: {metrics.total_clicks}</p>
-                            <p>Cliques por Dia:</p>
+                            <p>Total Clicks: {metrics.total_clicks}</p>
+                            <p>Clicks per Day:</p>
                             <div className='days'>
                                 {metrics.history.map((item) => (
                                     <p key={item.day}>• {item.day}: {item.clicks} clicks</p>

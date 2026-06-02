@@ -41,6 +41,12 @@ label{
     border: 2px solid black;
 }
 
+.urlFormNotice {
+    color: #c62828;
+    font-size: 18px;
+    margin-top: 15px;
+}
+
 .submitButton{
     padding: 8px 15px;
     background-color: #166bbb;

@@ -7,29 +7,35 @@ interface UrlCardProps {
   onBack: () => void
 }
 
+function isUrlExpired(expiresAt: string): boolean {
+    return new Date(expiresAt) < new Date()
+}
+
 export default function UrlCard({ url, onBack }: UrlCardProps){
 
     const navigate = useNavigate()
+    const expired = isUrlExpired(url.expires_at)
 
     function copyToClipboard() {
-        navigator.clipboard.writeText(`http://127.0.0.1:8000/${url.slug}`)
+        navigator.clipboard.writeText(`https://metriclink.duckdns.org/${url.slug}`)
     }
 
     return(
         <div className='urlCard'>
             <div className='topButton'>
-                <button className="backButton" onClick={onBack}>🠔 Voltar</button>
+                <button className="backButton" onClick={onBack}>🠔 Back</button>
             </div>
             <div className='formPosition'>
                 <div className="card_form">
-                    <h1>Informações da Url</h1>
-                    <p><strong>Url Curta: </strong>http://127.0.0.1:8000/{url.slug}</p>
-                    <p><strong>Url original: </strong>{url.original_url}</p>
-                    <p><strong>Criada em: </strong>{new Date(url.created_at).toLocaleDateString('pt-BR')}</p>
-                    <p><strong>Expira em: </strong>{new Date(url.expires_at).toLocaleDateString('pt-BR')}</p>
+                    <h1>Url Data</h1>
+                    <p><strong>Short Url: </strong>https://metriclink.duckdns.org/{url.slug}</p>
+                    <p><strong>Original Url: </strong>{url.original_url}</p>
+                    <p><strong>Created at: </strong>{new Date(url.created_at).toLocaleDateString('pt-BR')}</p>
+                    <p><strong>Expired at: </strong>{new Date(url.expires_at).toLocaleDateString('pt-BR')}</p>
+                    <p className="urlCardNotice">{expired ? "This url is expired" : ""}</p>
                     <div className="url-card-buttons">
-                        <button className="copyButton" onClick={copyToClipboard}>Copiar URL</button>
-                        <button className="submitButton" onClick={() => navigate(`/metrics/${url.slug}`)}>Ver métricas</button>
+                        <button className="copyButton" onClick={copyToClipboard}>Copy URL</button>
+                        <button className="submitButton" onClick={() => navigate(`/metrics/${url.slug}`)}>View Metrics</button>
                     </div>
                 </div>
             </div>
