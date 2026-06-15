@@ -1,0 +1,60 @@
+:root {
+    --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    --color-text: #1e293b;
+    --color-text-muted: #64748b;
+    --color-primary: #3b6ea5;
+    --color-primary-hover: #2f5885;
+    --color-surface: rgba(255, 255, 255, 0.88);
+    --color-sidebar: rgba(255, 255, 255, 0.72);
+    --color-border: rgba(59, 110, 165, 0.22);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-text);
+    background: linear-gradient(160deg, #dbeafe 0%, #e0e7ff 55%, #ede9fe 100%);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+p, label {
+    font-weight: 400;
+}
+
+strong {
+    font-weight: 600;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+}
+
+input {
+    font-family: inherit;
+    font-size: 15px;
+}

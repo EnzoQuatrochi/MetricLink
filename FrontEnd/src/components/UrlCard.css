@@ -1,90 +1,91 @@
-* {
-    margin: 0;
-    padding: 0;
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-}
-
-.urlCard{
-    height: 100vh;
+.urlCard {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    align-items: center;
 }
 
-.topButton{
+.topButton {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
 }
 
-.backButton{
-    margin: 25px;
-    padding: 8px 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
-    font-size: 18px;
-    background-color: #aed6fc;
+.backButton {
+    margin: 24px;
+    padding: 10px 16px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
     border-radius: 5px;
-    width: 110px;
-    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.15s ease;
 }
 
-.formPosition{
+.backButton:hover {
+    border-color: var(--color-primary);
+}
+
+.formPosition {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.card_form{
-    border: 2px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 70%);
-    width: 440px;
-    flex-shrink: 0;
-}
-
-.card_form h1{
-    font-size: 40px;
-    margin-top: 35px;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
 .card_form {
-    margin: 3px;
-    font-size: 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    max-width: 100%;
+    flex-shrink: 0;
+    padding: 0 32px 8px;
+    font-size: 0.9375rem;
+}
+
+.card_form h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 28px;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
 }
 
 .urlCardNotice {
     color: #c62828;
-    font-size: 20px;
-    margin-top: 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 12px;
 }
 
-.url-card-buttons{
+.url-card-buttons {
     display: flex;
-    gap: 20px
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-.copyButton{
-    padding: 8px 15px;
-    background-color: #aed6fc;
-    font-size: 18px;
+.copyButton,
+.card_form .submitButton {
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 600;
     border-radius: 5px;
     margin: 20px 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.15s ease;
 }
 
-.submitButton{
-    padding: 8px 15px;
-    background-color: #aed6fc;
-    font-size: 18px;
-    border-radius: 5px;
-    margin: 20px 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
+.copyButton:hover,
+.card_form .submitButton:hover {
+    background-color: var(--color-primary-hover);
 }

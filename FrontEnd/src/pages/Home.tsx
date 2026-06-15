@@ -26,7 +26,8 @@ export default function Home() {
     return (
         <div className='layout'>
             <Sidebar urls={urls} onSelectUrl={setSelectedUrl} />
-            <div className='home'>
+            <h1 className='title'>MetricLink</h1>
+            <div className='home'>  
                 {selectedUrl 
                     ? <UrlCard url={selectedUrl} onBack={handleBack} />
                     : <UrlForm onUrlCreated={handleUrlCreated} />

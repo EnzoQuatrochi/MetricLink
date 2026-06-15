@@ -13,27 +13,40 @@ export default function UrlForm({ onUrlCreated }: UrlFormProps){
     const [url, setUrl] = useState("")
     const [expiresAt, setExpiresAt] = useState("")
     const [notice, setNotice] = useState("")
+    const [noticeIsSuccess, setNoticeIsSuccess] = useState(false)
     const { min: minExpirationDate, max: maxExpirationDate } = getExpirationDateBounds()
+
+    function showError(message: string) {
+        setNoticeIsSuccess(false)
+        setNotice(message)
+    }
+
+    function clearNotice() {
+        setNotice("")
+        setNoticeIsSuccess(false)
+    }
 
     async function handleSubmit(){
         if (!url.trim()) {
-            setNotice("Empty url input")
+            showError("Empty url input")
             return
         }
         if (!expiresAt) {
-            setNotice("Empty expiration date")
+            showError("Empty expiration date")
             return
         }
         if (!isExpirationDateInRange(expiresAt, minExpirationDate, maxExpirationDate)) {
-            setNotice("Expiration date must be within the next 30 days")
+            showError("Expiration date must be within the next 30 days")
             return
         }
-
-        setNotice("")
 
         try {
             const newUrl = await createUrl(url.trim(), expiresAt)
             onUrlCreated(newUrl)
+            setUrl("")
+            setExpiresAt("")
+            setNotice("Url Created")
+            setNoticeIsSuccess(true)
         } catch (error) {
             console.error("Error to create URL:", error)
         }
@@ -50,7 +63,7 @@ export default function UrlForm({ onUrlCreated }: UrlFormProps){
                     value={url}
                     onChange={(e) => {
                         setUrl(e.target.value)
-                        setNotice("")
+                        clearNotice()
                     }}
                 />
             </div>
@@ -66,15 +79,15 @@ export default function UrlForm({ onUrlCreated }: UrlFormProps){
                     onChange={(e) => {
                         const value = e.target.value
                         if (value && !isExpirationDateInRange(value, minExpirationDate, maxExpirationDate)) {
-                            setNotice("Expiration date must be within the next 30 days")
+                            showError("Expiration date must be within the next 30 days")
                             return
                         }
                         setExpiresAt(value)
-                        setNotice("")
+                        clearNotice()
                     }}
                 />
             </div>
-            <p className="urlFormNotice">{notice}</p>
+            <p className={`urlFormNotice${noticeIsSuccess ? " urlFormNotice--success" : ""}`}>{notice}</p>
             <button className="submitButton" onClick={handleSubmit}>Create</button>
         </div>
     )

@@ -1,56 +1,73 @@
-* {
-    margin: 0;
-    padding: 0;
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-}
-
-.topButton{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-}
-
-.backButton{
-    margin: 25px;
-    padding: 8px 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 30%);
-    font-size: 18px;
-    background-color: #aed6fc;
-    border-radius: 5px;
-    width: 110px;
-    flex-shrink: 0;
-}
-
 .metrics {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 80px 24px 40px;
+}
+
+.topButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.backButton {
+    margin: 24px;
+    padding: 10px 16px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.15s ease;
+}
+
+.backButton:hover {
+    border-color: var(--color-primary);
 }
 
 .metricsCard {
-    border: 2px solid black;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 70%);
-    padding: 20px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 28px 32px;
+    max-width: 640px;
+    width: 100%;
 }
 
 .h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+}
+
+.h1 h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .metricsData {
-    margin-left: 50px;
+    margin-left: 0;
+}
+
+.metricsData p {
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    margin-bottom: 6px;
 }
 
 .days {
-    padding-left: 20px;
+    padding-left: 16px;
+}
+
+.days p {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
 }
