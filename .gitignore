@@ -2,3 +2,13 @@
 .vscode/
 **/__pycache__/
 **/.pytest_cache/
+
+# Backend
+BackEnd/.env
+BackEnd/.venv/
+BackEnd/__pycache__/
+
+# Frontend
+FrontEnd/.env.development
+FrontEnd/.env.production
+FrontEnd/node_modules/

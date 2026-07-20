@@ -1,7 +1,7 @@
 import type { Url, Metrics, MetricsHistory } from "../types";
 import axios from "axios";
 
-const BASE_URL = "https://metriclink.duckdns.org";
+const BASE_URL = import.meta.env.VITE_API_URL
 
 export async function createUrl(originalUrl: string, expires_at: string): Promise<Url> {
 
