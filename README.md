@@ -68,7 +68,12 @@ MetricLink/
 │   │   ├── domain/           # Entities, exceptions, and contracts (repositories)
 │   │   ├── application/      # Use cases (business rules)
 │   │   └── infrastructure/   # HTTP, database, cache, concrete implementations
-│   ├── tests/                # Unit tests with pytest and fakes
+│   │       └── http/
+│   │           └── dependencies.py  # FastAPI dependency providers (DI)
+│   ├── tests/
+│   │   ├── fake/             # In-memory fakes for unit tests
+│   │   └── integration/      # Integration tests (PostgreSQL, Redis, API)
+│   ├── run.ps1               # Start the API locally (Windows)
 │   ├── requirements.txt
 │   └── .env.exemple          # Environment variables template
 │
@@ -96,17 +101,18 @@ Deployed at **https://metric-link.vercel.app/** via [Vercel](https://vercel.com/
 
 ### Backend (`BackEnd/`)
 
-| Technology       | Usage                                              |
-|------------------|----------------------------------------------------|
-| **Python 3.12+** | API language                                       |
-| **FastAPI**      | Web framework and auto-generated docs (OpenAPI)    |
-| **Uvicorn**      | ASGI server                                        |
-| **Pydantic**     | Request/response schema validation                 |
-| **PostgreSQL**   | Persistence for URLs and click metrics             |
-| **psycopg**      | PostgreSQL driver                                  |
-| **Redis**        | Redirect cache (slug → original URL)               |
-| **pytest**       | Automated tests                                    |
-| **Ruff**         | Python linter                                      |
+| Technology         | Usage                                              |
+|--------------------|----------------------------------------------------|
+| **Python 3.12+**   | API language                                       |
+| **FastAPI**        | Web framework and auto-generated docs (OpenAPI)    |
+| **Uvicorn**        | ASGI server                                        |
+| **Pydantic**       | Request/response schema validation                 |
+| **PostgreSQL**     | Persistence for URLs and click metrics             |
+| **psycopg**        | PostgreSQL driver                                  |
+| **Redis**          | Redirect cache (slug → original URL)               |
+| **pytest**         | Automated tests                                    |
+| **testcontainers** | Integration tests with real PostgreSQL and Redis   |
+| **Ruff**           | Python linter                                      |
 
 Deployed at **https://metriclink.duckdns.org** on an Oracle Cloud free-tier VM.
 
@@ -119,21 +125,21 @@ Deployed at **https://metriclink.duckdns.org** on an Oracle Cloud free-tier VM.
 The backend follows **Clean Architecture** in layers: business rules at the center, use cases in the application layer, and technical details (HTTP, PostgreSQL, Redis) in infrastructure. It applies **Clean Code** principles: dependencies point inward, each use case has a single responsibility, and the domain does not know about FastAPI or the database.
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│  infrastructure/http     FastAPI, routes, Pydantic schemas │
-│  infrastructure/database PostgreSQL repositories           │
-│  infrastructure/cache    Redis (CacheService)              │
-└───────────────────────────┬────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  infrastructure/http        FastAPI, DI providers, schemas  │
+│  infrastructure/database    PostgreSQL repositories         │
+│  infrastructure/cache       Redis (CacheService)            │
+└───────────────────────────┬─────────────────────────────────┘
                             │ depends on
-┌───────────────────────────▼────────────────────────────────┐
-│  application/use_cases   CreateUrl, RedirectUrl,           │
-│                          GetMetrics, DeleteUrl             │
-└───────────────────────────┬────────────────────────────────┘
+┌───────────────────────────▼─────────────────────────────────┐
+│  application/use_cases      CreateUrl, RedirectUrl,         │
+│                             GetMetrics, DeleteUrl           │
+└───────────────────────────┬─────────────────────────────────┘
                             │ depends on
-┌───────────────────────────▼────────────────────────────────┐
-│  domain/                 Url (entity), UrlRepository,      │
-│                          MetricRepository, exceptions      │
-└────────────────────────────────────────────────────────────┘
+┌───────────────────────────▼─────────────────────────────────┐
+│  domain/                    Url (entity), UrlRepository,    │
+│                             MetricRepository, exceptions    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 **Main use cases:**
@@ -145,7 +151,11 @@ The backend follows **Clean Architecture** in layers: business rules at the cent
 | `GetMetrics`  | Total clicks, clicks per day, and history                                      |
 | `DeleteUrl`   | Removes a URL by slug                                                          |
 
-In the domain, contracts such as `UrlRepository` enable **dependency inversion**; entities expose behavior (`Url.is_expired()`), and business errors become typed exceptions (`UrlNotFoundError`, `ExpiredUrlError`). Tests use **fakes** in `BackEnd/tests/fake/` with the same interfaces as production.
+In the domain, contracts such as `UrlRepository` enable **dependency inversion**; entities expose behavior (`Url.is_expired()`), and business errors become typed exceptions (`UrlNotFoundError`, `ExpiredUrlError`).
+
+At the HTTP layer, **dependency injection** is handled by FastAPI: `BackEnd/src/infrastructure/http/dependencies.py` exposes provider functions (`get_url_repository`, `get_metric_repository`, `get_cache`), and routes in `url_router.py` receive them via `Depends(...)`. This keeps use cases decoupled from concrete implementations and allows integration tests to override dependencies with real PostgreSQL/Redis instances through `app.dependency_overrides`.
+
+Unit tests use **fakes** in `BackEnd/tests/fake/` with the same interfaces as production.
 
 **Persistence:** the script `BackEnd/src/infrastructure/database/schema.sql` defines the `urls` and `metrics` tables.
 
@@ -237,6 +247,12 @@ Start the API:
 uvicorn src.infrastructure.http.app:app --reload --host 127.0.0.1 --port 8000
 ```
 
+On **Windows (PowerShell)**, you can also use the helper script:
+
+```powershell
+.\run.ps1
+```
+
 Interactive API docs (Swagger): **http://127.0.0.1:8000/docs**
 
 ### 4. Set up the frontend
@@ -296,7 +312,10 @@ Full interactive documentation at **https://metriclink.duckdns.org/docs**.
 
 ## Tests
 
-Tests cover the entire **backend**. They are **unit** tests: they exercise the domain and use cases in memory, without starting PostgreSQL, Redis, or the API.
+Tests cover the entire **backend** and are split into two layers:
+
+- **Unit tests** — exercise the domain and use cases in memory, without PostgreSQL, Redis, or the API.
+- **Integration tests** — spin up real PostgreSQL and Redis instances via [Testcontainers](https://testcontainers.com/) (requires **Docker**) and validate repositories, cache, and HTTP endpoints end-to-end.
 
 ### Structure
 
@@ -306,6 +325,11 @@ BackEnd/tests/
 │   ├── fake_url_repository.py      # In-memory UrlRepository implementation
 │   ├── fake_metric_repository.py   # In-memory MetricRepository implementation
 │   └── fake_cache_service.py       # Simulated cache for RedirectUrl
+├── integration/
+│   ├── test_api.py                 # HTTP routes (TestClient + dependency overrides)
+│   ├── test_url_repository.py      # UrlRepositoryImplementation against PostgreSQL
+│   ├── test_metric_repository.py   # MetricRepositoryImplementation against PostgreSQL
+│   └── test_cache_service.py       # CacheService against Redis
 ├── test_create_url.py              # URL creation and 30-day limit
 ├── test_redirect_url.py            # Redirect, expiration, and missing slug
 ├── test_get_metrics.py             # Click registration and queries
@@ -315,6 +339,8 @@ BackEnd/tests/
 
 ### What is tested
 
+**Unit tests**
+
 | File                     | Focus                                                          |
 |--------------------------|----------------------------------------------------------------|
 | `test_create_url.py`     | Slug generated, URL persisted, expiration capped at 30 days    |
@@ -323,9 +349,18 @@ BackEnd/tests/
 | `test_url.py`            | `Url.is_expired()` for valid and expired links                 |
 | `test_url_exceptions.py` | Domain exception types and messages                            |
 
-### Fakes
+**Integration tests**
 
-Instead of mocking external libraries, the project uses **fakes** — simple implementations of repository contracts:
+| File                                    | Focus                                                     |
+|-----------------------------------------|-----------------------------------------------------------|
+| `integration/test_api.py`               | Create URL, redirect (302), and metrics history via HTTP  |
+| `integration/test_url_repository.py`    | Save and retrieve URLs in PostgreSQL                      |
+| `integration/test_metric_repository.py` | Click registration, per-day count, and history            |
+| `integration/test_cache_service.py`     | Redis get/set/delete with TTL                             |
+
+### Fakes (unit tests)
+
+Instead of mocking external libraries, unit tests use **fakes** — simple implementations of repository contracts:
 
 - `FakeUrlRepository` stores URLs in a dictionary (`slug → Url`).
 - `FakeMetricRepository` accumulates clicks in memory.
@@ -333,13 +368,18 @@ Instead of mocking external libraries, the project uses **fakes** — simple imp
 
 This keeps tests fast, deterministic, and aligned with Clean Architecture: the use case receives the same interface it would use in production.
 
+Integration tests override FastAPI dependencies (`app.dependency_overrides`) to wire real repository and cache implementations backed by Testcontainers.
+
 ### How to run
 
 With the virtual environment activated in `BackEnd/`:
 
 ```bash
-# Run all tests
+# Run all tests (unit + integration; integration requires Docker)
 pytest
+
+# Unit tests only (no Docker needed)
+pytest --ignore=tests/integration
 
 # More verbose output
 pytest -v
@@ -347,6 +387,7 @@ pytest -v
 # A specific file or test
 pytest tests/test_redirect_url.py
 pytest tests/test_create_url.py::test_create_url_valid
+pytest tests/integration/test_api.py
 ```
 
 ### Static analysis (backend)
