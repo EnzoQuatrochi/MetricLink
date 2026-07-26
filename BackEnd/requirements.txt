@@ -1,8 +1,10 @@
 pytest
-ruff
+ruff==0.15.22
 psycopg[binary,pool]
 python-dotenv
 fastapi[standard]
 uvicorn
 pydantic
 redis
+testcontainers[postgres,redis]
+httpx

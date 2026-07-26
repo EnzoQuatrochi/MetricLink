@@ -5,9 +5,9 @@ from src.infrastructure.database.connection import get_connection
 
 class UrlRepositoryImplementation(UrlRepository):
 
-    def __init__(self):
+    def __init__(self, connection=None):
 
-        self.connection = get_connection()
+        self.connection = connection or get_connection()
 
     def save_url(self, url: Url) -> None:
 
