@@ -4,9 +4,9 @@ from src.infrastructure.database.connection import get_connection
 
 class MetricRepositoryImplementation(MetricsRepository):
 
-    def __init__(self):
-
-        self.connection = get_connection()
+    def __init__(self, connection=None):
+    
+        self.connection = connection or get_connection()
 
     def register_click(self, slug: str) -> None:
 

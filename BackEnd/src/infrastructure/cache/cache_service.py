@@ -27,7 +27,7 @@ class CacheService:
 
     def set(self, key: str, value: str, ttl: int) -> None:
 
-        self.connection.setex(key, ttl, value)
+        self.connection.set(key, value, ex=ttl)
 
     def delete(self, key: str) -> None:
 

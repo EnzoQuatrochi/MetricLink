@@ -6,3 +6,5 @@ fastapi[standard]
 uvicorn
 pydantic
 redis
+testcontainers[postgres,redis]
+httpx
