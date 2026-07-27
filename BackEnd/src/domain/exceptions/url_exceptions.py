@@ -2,7 +2,7 @@ class InvalidUrlError(Exception):
 
     def __init__(self):
 
-        super().__init__("The given url is not valid. Certified to include https:// or http:/")
+        super().__init__("The given url is not valid. Certified to include https:// or http://")
 
 class ExpiredUrlError(Exception):
 
