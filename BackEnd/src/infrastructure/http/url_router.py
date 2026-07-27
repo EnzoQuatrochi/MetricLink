@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from fastapi.responses import RedirectResponse
 from datetime import date
 from src.infrastructure.http.dependencies import get_metric_repository, get_url_repository, get_cache
@@ -10,6 +10,10 @@ from src.infrastructure.http.schemas import CreateUrlRequest, UrlResponse
 
 router = APIRouter()
 
+@router.get("/favicon.ico")
+def favicon():
+    return Response(status_code=204)
+
 @router.post("/urls")
 def create_url(request: CreateUrlRequest, repository = Depends(get_url_repository)) -> UrlResponse:
 
@@ -19,9 +23,6 @@ def create_url(request: CreateUrlRequest, repository = Depends(get_url_repositor
 
 @router.get("/{slug}")
 def redirect_url(slug: str, repository = Depends(get_url_repository), metric_repository = Depends(get_metric_repository), cache = Depends(get_cache)):
-
-    if slug == "favicon.ico":
-        return None
 
     use_case = RedirectUrl(repository, cache)
 

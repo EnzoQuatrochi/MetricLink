@@ -1,4 +1,5 @@
 .form {
+    position: relative;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     width: 440px;
@@ -9,10 +10,54 @@
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 0 32px 8px;
+    isolation: isolate;
+}
+
+.form-borderFlash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+}
+
+.form-borderFlash-stroke {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: form-border-draw 3.5s ease-out forwards;
+}
+
+.form-borderFlash-stroke--success {
+    stroke: #2e7d32;
+}
+
+.form-borderFlash-stroke--error {
+    stroke: #c62828;
+}
+
+@keyframes form-border-draw {
+    0% {
+        stroke-dashoffset: 100;
+        opacity: 1;
+    }
+
+    75% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
 }
 
 .form h1 {
-    font-size: 1.75rem;
+    font-size: 28px;
     font-weight: 700;
     margin-top: 28px;
     letter-spacing: -0.02em;
@@ -26,7 +71,7 @@
 }
 
 .form label {
-    font-size: 0.9375rem;
+    font-size: 15px;
     font-weight: 500;
     margin-top: 20px;
     color: var(--color-text);
@@ -54,7 +99,7 @@
 
 .urlFormNotice {
     color: #c62828;
-    font-size: 0.9375rem;
+    font-size: 15px;
     font-weight: 500;
     margin-top: 16px;
 }
@@ -67,7 +112,7 @@
     padding: 10px 24px;
     background-color: var(--color-primary);
     color: #fff;
-    font-size: 0.9375rem;
+    font-size: 15px;
     font-weight: 600;
     border-radius: 5px;
     margin: 24px 0 28px;

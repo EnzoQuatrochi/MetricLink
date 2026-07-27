@@ -1,4 +1,5 @@
 from datetime import datetime
+from src.domain.exceptions.url_exceptions import InvalidUrlError
 
 class Url():
 
@@ -7,6 +8,10 @@ class Url():
         self.original_url = original_url
         self.slug = slug
         self.created_at = datetime.now()
+
+        if not original_url.startswith(("http://", "https://")):
+
+            raise InvalidUrlError()
 
         if isinstance(expires_at, datetime):
             self.expires_at = expires_at
