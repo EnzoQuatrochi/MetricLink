@@ -4,6 +4,7 @@ import type { Url } from '../types'
 import { useRef, useState } from 'react'
 import { createUrl } from '../services/api'
 import { getExpirationDateBounds, isExpirationDateInRange } from '../utils/date'
+import DatePicker from './DatePicker'
 
 interface UrlFormProps {
     onUrlCreated: (url: Url) => void
@@ -126,15 +127,11 @@ export default function UrlForm({ onUrlCreated }: UrlFormProps){
             </div>
             <div className='properties'>
                 <label>Expiration date:</label>
-                <input
-                    className="data"
-                    type="date"
-                    lang="en-US"
-                    min={minExpirationDate}
-                    max={maxExpirationDate}
+                <DatePicker
+                    minDate={minExpirationDate}
+                    maxDate={maxExpirationDate}
                     value={expiresAt}
-                    onChange={(e) => {
-                        const value = e.target.value
+                    onChange={(value) => {
                         if (value && !isExpirationDateInRange(value, minExpirationDate, maxExpirationDate)) {
                             showError("Expiration date must be within the next 30 days")
                             return

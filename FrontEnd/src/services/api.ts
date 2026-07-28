@@ -39,3 +39,13 @@ export async function getMetricsHistory(slug: string): Promise<MetricsHistory> {
 
     return response.data
 }
+
+export async function deleteUrl(slug: string): Promise<void> {
+
+    const response = await axios({
+        method: 'delete',
+        url: `${BASE_URL}/urls/${slug}`
+    })
+
+    return response.data
+}

@@ -8,6 +8,10 @@ const router = createBrowserRouter([
         Component: Home,
     },
     {
+        path: "/url/:slug",
+        Component: Home,
+    },
+    {
         path: "/metrics/:slug",
         Component: Metrics,
     },
