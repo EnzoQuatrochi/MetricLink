@@ -44,7 +44,7 @@
     align-items: center;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 440px;
+    width: 455px;
     max-width: 100%;
     flex-shrink: 0;
     padding: 0 32px 8px;
@@ -68,17 +68,19 @@
     color: #c62828;
     font-size: 16px;
     font-weight: 500;
-    margin-top: 12px;
+    padding-top: 10px;
+    text-align: center;
 }
 
 .url-card-buttons {
     display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
 .copyButton,
-.card_form .submitButton {
+.card_form .submitButton,
+.card_form .deleteButton {
     padding: 10px 20px;
     background-color: var(--color-primary);
     color: #fff;
@@ -91,6 +93,7 @@
 }
 
 .copyButton:hover,
-.card_form .submitButton:hover {
+.card_form .submitButton:hover,
+.card_form .deleteButton:hover {
     background-color: var(--color-primary-hover);
 }
