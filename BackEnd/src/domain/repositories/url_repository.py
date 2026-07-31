@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 from typing import Optional
+from abc import ABC, abstractmethod
 from src.domain.entities.url import Url
 
 class UrlRepository(ABC):
@@ -11,6 +11,10 @@ class UrlRepository(ABC):
 
     @abstractmethod
     def get_url(self, slug: str) -> Optional[Url]:
+
+        pass
+
+    def get_urls_by_user(self, user_id: int):
 
         pass
 
