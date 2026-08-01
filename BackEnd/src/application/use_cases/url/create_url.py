@@ -9,7 +9,7 @@ class CreateUrl:
 
         self.repository = repository
 
-    def execute(self, url: str, expires_at: date, user_id : int) -> Url:
+    def execute(self, url: str, expires_at: date, user_id : int | None = None) -> Url:
 
         slug = secrets.token_urlsafe(6)
 

@@ -1,5 +1,5 @@
-import hashlib
 import bcrypt
+import hashlib
 from src.domain.entities.user import User
 from src.domain.repositories.user_repository import UserRepository
 from src.domain.exceptions.user_exceptions import UserAlreadyExistsError
@@ -20,8 +20,8 @@ class Register:
         
         password_bytes = hashlib.sha256(password.encode()).hexdigest()
         hashed = bcrypt.hashpw(password_bytes.encode(), bcrypt.gensalt())
-
-        newUser = User(email, hashed)
+        password_hash = hashed.decode() if isinstance(hashed, bytes) else hashed
+        newUser = User(email=email, password_hash=password_hash)
 
         self.repository.create_user(newUser)
 

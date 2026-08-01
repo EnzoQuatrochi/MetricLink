@@ -1,1 +1,1 @@
-python -m uvicorn src.infrastructure.http.app:app --reload --host 127.0.0.1 --port 8000
+.\venv\Scripts\python.exe -m uvicorn src.infrastructure.http.app:app --reload --host 127.0.0.1 --port 8000

@@ -3,12 +3,12 @@ from fastapi.security import OAuth2PasswordRequestForm
 from src.application.use_cases.user.login import Login
 from src.infrastructure.http.schemas import RegisterRequest
 from src.application.use_cases.user.register import Register
-from src.infrastructure.http.dependencies import get_current_user, get_user_repository
+from src.infrastructure.http.dependencies import get_user_repository
 
 router = APIRouter()
 
 @router.post("/auth/register")
-def create_user(request: RegisterRequest, repository = Depends(get_user_repository), current_user = Depends(get_current_user)) -> dict:
+def create_user(request: RegisterRequest, repository = Depends(get_user_repository)) -> dict:
 
     use_case = Register(repository)
 

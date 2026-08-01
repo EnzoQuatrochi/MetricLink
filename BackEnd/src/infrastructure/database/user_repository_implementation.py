@@ -14,7 +14,7 @@ class UserRepositoryImplementation(UserRepository):
         with self.connection.cursor() as cursor:
 
             cursor.execute("INSERT INTO users (email, password_hash) VALUES (%s, %s)",
-                (user.email, user.password_hash.decode()))
+                (user.email, user.password_hash))
             self.connection.commit()
 
     def get_user_by_email(self, email: str) -> Optional[User]:

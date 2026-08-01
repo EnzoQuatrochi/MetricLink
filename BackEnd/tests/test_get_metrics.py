@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from fake.fake_metric_repository import FakeMetricRepository
+from tests.fake.fake_metric_repository import FakeMetricRepository
 
 def test_register_and_get_click():
 

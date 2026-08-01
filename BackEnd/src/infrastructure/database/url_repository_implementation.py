@@ -21,27 +21,26 @@ class UrlRepositoryImplementation(UrlRepository):
 
         with self.connection.cursor() as cursor:
 
-            cursor.execute("SELECT * FROM urls WHERE slug = %s", (slug,))
-            rows = cursor.fetchall()
+            cursor.execute("SELECT slug, original_url, expires_at, user_id FROM urls WHERE slug = %s", (slug,))
+            row = cursor.fetchone()
 
-            if rows is None:
-
+            if row is None:
                 return None
 
-            return [Url(original_url=row[2], slug=row[1], expires_at=row[4]) for row in rows]
+            return Url(original_url=row[1], slug=row[0], expires_at=row[2], user_id=row[3])
 
     def get_urls_by_user(self, user_id: int) -> Optional[Url]:
 
         with self.connection.cursor() as cursor:
 
-            cursor.execute("SELECT * FROM urls WHERE user_id = %s", (user_id,))
+            cursor.execute("SELECT slug, original_url, expires_at, user_id FROM urls WHERE user_id = %s", (user_id,))
             row = cursor.fetchone()
 
             if row is None:
 
                 return None
 
-            return Url(original_url=row[2], slug=row[1], expires_at=row[4], user_id=row[5])
+            return Url(original_url=row[1], slug=row[0], expires_at=row[2], user_id=row[3])
 
     def delete_url(self, slug: str) -> None:
         

@@ -16,7 +16,7 @@ def postgres():
             password=conteiner.password
         )
         with conn.cursor() as cursor:
-            cursor.execute(open("src/infrastructure/database/schema.sql").read())
+            cursor.execute(open("src/infrastructure/database/schema.sql", "rb").read())
         conn.commit()
         yield conn
         conn.close()
@@ -28,7 +28,7 @@ def repo(postgres):
 def test_save_and_get_url(repo):
 
     expires_at = (datetime.now() + timedelta(days=1)).isoformat()
-    url = Url(original_url="https://google.com", slug="test123", expires_at=expires_at)
+    url = Url(original_url="https://google.com", slug="test123", expires_at=expires_at, user_id=None)
 
     repo.save_url(url)
     result = repo.get_url(url.slug)
