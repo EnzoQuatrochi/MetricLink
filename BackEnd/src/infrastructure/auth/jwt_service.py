@@ -1,10 +1,10 @@
+import os
 from jose import jwt
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
-config = dotenv_values(".env")
-
-SECRET_KEY = config["SECRET_KEY"]
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 def create_token(email: str) -> str:
