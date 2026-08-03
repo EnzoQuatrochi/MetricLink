@@ -19,4 +19,15 @@ class FakeUrlRepository(UrlRepository):
     def delete_url(self, slug: str) -> None:
 
         del self.urls[slug]
-        
+    
+    def get_urls_by_user(self, user_id: int) -> list[Url]:
+
+        result = []
+
+        for url in self.urls.values():
+
+            if url.user_id == user_id:
+
+                result.append(url)
+                
+        return result   
