@@ -9,4 +9,4 @@ class GetUrlsByUser:
 
     def execute(self, user_id: int) -> list[Url]:
 
-        return self.repository. get_urls_by_user(user_id)
+        return self.repository.get_urls_by_user(user_id)

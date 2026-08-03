@@ -1,0 +1,49 @@
+.pag{
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+    height: 100vh;
+}
+
+.LandingForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 550px;
+    max-width: 100%;
+    padding: 25px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1{
+    font-size: 40px;
+}
+
+p .subtitle{
+    font-size: 18px;
+}
+
+.buttons{
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.buttons button{
+    padding: 10px 15px;
+    background-color: var(--color-primary);
+    color: #fff;
+    border-radius: 5px;
+    margin: 24px 0 28px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px #0000001a;
+}
+
+.buttons button:hover{
+    background-color: var(--color-primary-hover);
+}

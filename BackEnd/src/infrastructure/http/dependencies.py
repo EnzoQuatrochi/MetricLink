@@ -1,3 +1,4 @@
+from fastapi import Security
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from src.infrastructure.auth.jwt_service import decode_token
@@ -36,3 +37,17 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token"
         )
+
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
+
+def get_optional_user(token: str = Security(oauth2_scheme_optional)) -> str | None:
+
+    if not token:
+
+        return None
+    try:
+        
+        return decode_token(token)
+    except Exception:
+
+        return None

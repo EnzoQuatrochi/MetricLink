@@ -14,7 +14,8 @@ class UrlRepository(ABC):
 
         pass
 
-    def get_urls_by_user(self, user_id: int) -> Optional[Url]:
+    @abstractmethod
+    def get_urls_by_user(self, user_id: int) -> list[Url]:
 
         pass
 
