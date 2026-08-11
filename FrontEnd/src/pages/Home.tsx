@@ -1,50 +1,92 @@
 import './Home.css'
-import { useState } from 'react'
 import type { Url } from '../types'
+import type { AppMode } from '../types'
+import { useEffect, useState } from 'react'
 import UrlForm from '../components/UrlForm'
 import UrlCard from '../components/UrlCard'
 import Sidebar from '../components/Sidebar'
-import { useParams, useNavigate } from 'react-router-dom'
+import ConfigComponent from '../components/ConfigComponent'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { deleteUrl, getUserUrls } from '../services/api'
+
+interface HomeState {
+    mode: AppMode
+    token?: string
+}
 
 export default function Home() {
 
-    const { slug } = useParams<{ slug: string }>()
+    const location = useLocation()
     const navigate = useNavigate()
-    
-    const [urls, setUrls] = useState<Url[]>(() => {
-        const saved = localStorage.getItem('urls')
-        return saved ? JSON.parse(saved) : []
-    })
 
-    const displayUrl = slug
-        ? urls.find(u => u.slug === slug) ?? null
+    const { mode, token } = (location.state as HomeState) ?? { mode: 'local' }
+
+    const [urls, setUrls] = useState<Url[]>(() => {
+        if (mode === 'local') {
+            const saved = localStorage.getItem('urls')
+            return saved ? JSON.parse(saved) : []
+        }
+        return []
+    })
+    useEffect(() => {
+        if (mode === 'auth' && token) {
+            getUserUrls(token).then(setUrls)
+        }
+    }, [mode, token])
+
+    const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+    const [isConfigOpen, setIsConfigOpen] = useState(false)
+
+    const displayUrl = selectedSlug
+        ? urls.find(u => u.slug === selectedSlug) ?? null
         : null
 
     function handleUrlCreated(newUrl: Url) {
         const updatedUrls = [...urls, newUrl]
         setUrls(updatedUrls)
-        localStorage.setItem('urls', JSON.stringify(updatedUrls))
+        if (mode === 'local') {
+            localStorage.setItem('urls', JSON.stringify(updatedUrls))
+        }
     }
 
     function handleBack() {
-        navigate('/')
+        setSelectedSlug(null)
     }
 
-    function handleDelete(slug: string) {
+    async function handleDelete(slug: string) {
+        if (mode === 'auth') {
+            await deleteUrl(slug, token)
+        }
         const updatedUrls = urls.filter(u => u.slug !== slug)
         setUrls(updatedUrls)
-        localStorage.setItem('urls', JSON.stringify(updatedUrls))
-        navigate('/')
+        if (mode === 'local') {
+            localStorage.setItem('urls', JSON.stringify(updatedUrls))
+        }
+        setSelectedSlug(null)
     }
 
     return (
         <div className='layout'>
-            <Sidebar urls={urls} onSelectUrl={(url) => navigate(`/url/${url.slug}`)} />
+            <div className="home-background"></div>
+            {!displayUrl && (
+                <div className='config'>
+                    <button className="configButton" onClick={() => setIsConfigOpen(true)}>
+                        <img src="/config.png" alt="Configurações" width="24" height="24" />
+                    </button>
+                </div>
+            )}
+            {isConfigOpen && (
+                <ConfigComponent
+                    onClose={() => setIsConfigOpen(false)}
+                    onLogout={() => navigate('/')}
+                />
+            )}
+            <Sidebar urls={urls} onSelectUrl={(url) => setSelectedSlug(url.slug)}></Sidebar>
             <h1 className='title'>MetricLink</h1>
-            <div className='home'>  
-                {displayUrl 
-                    ? <UrlCard url={displayUrl} onBack={handleBack} onDelete={handleDelete} />
-                    : <UrlForm onUrlCreated={handleUrlCreated} />
+            <div className='home'>
+                {displayUrl
+                    ? <UrlCard url={displayUrl} onBack={handleBack} onDelete={handleDelete} token={token} />
+                    : <UrlForm onUrlCreated={handleUrlCreated} mode={mode} token={token} />
                 }
             </div>
         </div>

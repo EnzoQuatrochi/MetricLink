@@ -1,10 +1,10 @@
+import pytest
 from datetime import datetime, timedelta
 from src.domain.entities.url import Url
 from src.domain.exceptions.url_exceptions import ExpiredUrlError, UrlNotFoundError
-from fake.fake_url_repository import FakeUrlRepository
-from src.application.use_cases.redirect_url import RedirectUrl
-from fake.fake_cache_service import FakeCacheService
-import pytest
+from tests.fake.fake_url_repository import FakeUrlRepository
+from src.application.use_cases.url.redirect_url import RedirectUrl
+from tests.fake.fake_cache_service import FakeCacheService
 
 def test_valid_redirect_url():
 

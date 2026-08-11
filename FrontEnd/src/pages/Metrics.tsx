@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import type { MetricsHistory } from '../types'
 import { getMetricsHistory } from '../services/api'
@@ -9,10 +9,12 @@ export default function Metrics() {
 
     const { slug } = useParams<{ slug: string }>()
     const [metrics, setMetrics] = useState<MetricsHistory | null>(null)
+    const location = useLocation()
+    const { token } = (location.state as { token?: string }) ?? {}
 
     useEffect(() => {
         async function fetchMetrics() {
-            const data = await getMetricsHistory(slug!)
+            const data = await getMetricsHistory(slug!, token)
             setMetrics(data)
         }
         fetchMetrics()

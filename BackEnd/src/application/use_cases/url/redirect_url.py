@@ -1,11 +1,11 @@
+from typing import Any
 from datetime import datetime
 from src.domain.exceptions.url_exceptions import ExpiredUrlError, UrlNotFoundError
 from src.domain.repositories.url_repository import UrlRepository
-from src.infrastructure.cache.cache_service import CacheService
 
 class RedirectUrl:
 
-    def __init__(self, repository: UrlRepository, cache: CacheService):
+    def __init__(self, repository: UrlRepository, cache: Any):
 
         self.repository = repository
         self.cache = cache

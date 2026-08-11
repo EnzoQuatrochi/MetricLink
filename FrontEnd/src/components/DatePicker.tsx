@@ -10,13 +10,7 @@ interface DatePickerProps {
     placeholder?: string
 }
 
-export default function DatePicker({
-    value,
-    onChange,
-    minDate,
-    maxDate,
-    placeholder = "dd/mm/aaaa"
-}: DatePickerProps) {
+export default function DatePicker({ value, onChange, minDate, maxDate, placeholder = "dd/mm/aaaa"}: DatePickerProps) {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
 
@@ -53,10 +47,19 @@ export default function DatePicker({
     }
 
     const getDisplayValue = () => {
-        if (!value) return ""
+
+        if (!value) {
+            return ""
+        } 
+
         const parts = value.split('-')
-        if (parts.length !== 3) return value
+
+        if (parts.length !== 3) {
+            return value
+        }
+
         const [year, month, day] = parts
+
         return `${day}/${month}/${year}`
     }
 

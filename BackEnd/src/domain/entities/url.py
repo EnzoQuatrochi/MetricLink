@@ -1,13 +1,14 @@
-from datetime import datetime
+from datetime import datetime, date
 from src.domain.exceptions.url_exceptions import InvalidUrlError
 
 class Url():
 
-    def __init__(self, original_url: str, slug: str, expires_at: str):
+    def __init__(self, original_url: str, slug: str, expires_at: str | date, user_id: int | None = None):
 
         self.original_url = original_url
         self.slug = slug
         self.created_at = datetime.now()
+        self.user_id = user_id
 
         if not original_url.startswith(("http://", "https://")):
 

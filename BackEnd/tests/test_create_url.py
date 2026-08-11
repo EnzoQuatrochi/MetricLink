@@ -1,6 +1,6 @@
-from fake.fake_url_repository import FakeUrlRepository
+from tests.fake.fake_url_repository import FakeUrlRepository
 from datetime import datetime, timedelta
-from src.application.use_cases.create_url import CreateUrl
+from src.application.use_cases.url.create_url import CreateUrl
 from src.domain.entities.url import Url
 
 def test_create_url_valid():
@@ -10,7 +10,7 @@ def test_create_url_valid():
 
     expires_at = (datetime.now() + timedelta(days=30)).date()
 
-    newUrl = create_url_use_case.execute("https://google.com", expires_at)
+    newUrl = create_url_use_case.execute("https://google.com", expires_at, None)
 
     assert isinstance(newUrl, Url)
     assert newUrl.original_url == "https://google.com"
@@ -24,7 +24,7 @@ def test_create_url_expires_capped_at_30_days():
 
     expires_at = (datetime.now() + timedelta(days=60)).date()
 
-    newUrl = create_url_use_case.execute("https://google.com", expires_at)
+    newUrl = create_url_use_case.execute("https://google.com", expires_at, None)
 
     max_expires = (datetime.now() + timedelta(days=30)).date()
 

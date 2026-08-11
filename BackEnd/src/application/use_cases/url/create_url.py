@@ -1,7 +1,7 @@
 import secrets
+from datetime import date, timedelta
 from src.domain.entities.url import Url
 from src.domain.repositories.url_repository import UrlRepository
-from datetime import date, timedelta
 
 class CreateUrl:
 
@@ -9,7 +9,7 @@ class CreateUrl:
 
         self.repository = repository
 
-    def execute(self, url: str, expires_at: date) -> Url:
+    def execute(self, url: str, expires_at: date, user_id : int | None = None) -> Url:
 
         slug = secrets.token_urlsafe(6)
 
@@ -19,7 +19,7 @@ class CreateUrl:
 
             expires_at = max_expires
         
-        newUrl = Url(url, slug, expires_at)
+        newUrl = Url(url, slug, expires_at, user_id)
         
         self.repository.save_url(newUrl)
 

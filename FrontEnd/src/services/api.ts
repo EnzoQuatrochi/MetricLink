@@ -3,22 +3,53 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL
 
-export async function createUrl(originalUrl: string, expires_at: string): Promise<Url> {
+function authHeader(token?: string) {
+    return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+export async function loginUser(email: string, password: string): Promise<string> {
+    const formData = new URLSearchParams()
+    formData.append('username', email)
+    formData.append('password', password)
 
     const response = await axios({
         method: 'post',
+        url: `${BASE_URL}/auth/login`,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        data: formData,
+    })
+
+    return response.data.access_token
+}
+
+export async function createUser(email: string, password: string): Promise<string> {
+    await axios({
+        method: 'post',
+        url: `${BASE_URL}/auth/register`,
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            email: email,
+            password: password,
+        },
+    })
+
+    return loginUser(email, password)
+}
+
+export async function createUrl(originalUrl: string, expires_at: string, token?: string): Promise<Url> {
+    const response = await axios({
+        method: 'post',
         url: `${BASE_URL}/urls`,
+        headers: authHeader(token),
         data: {
             original_url: originalUrl,
             expires_at: expires_at,
         },
     })
-
     return response.data
 }
 
 export async function getMetrics(slug: string, day: string): Promise<Metrics> {
-
     const response = await axios({
         method: 'get',
         url: `${BASE_URL}/urls/${slug}/metrics`,
@@ -26,26 +57,32 @@ export async function getMetrics(slug: string, day: string): Promise<Metrics> {
             day: day,
         }
     })
-
     return response.data
 }
 
-export async function getMetricsHistory(slug: string): Promise<MetricsHistory> {
+export async function getUserUrls(token: string): Promise<Url[]> {
+    const response = await axios({
+        method: 'get',
+        url: `${BASE_URL}/urls`,
+        headers: authHeader(token),
+    })
+    return response.data
+}
 
+export async function getMetricsHistory(slug: string, token?: string): Promise<MetricsHistory> {
     const response = await axios({
         method: 'get',
         url: `${BASE_URL}/urls/${slug}/history`,
+        headers: authHeader(token),
     })
-
     return response.data
 }
 
-export async function deleteUrl(slug: string): Promise<void> {
-
+export async function deleteUrl(slug: string, token?: string): Promise<void> {
     const response = await axios({
         method: 'delete',
-        url: `${BASE_URL}/urls/${slug}`
+        url: `${BASE_URL}/urls/${slug}`,
+        headers: authHeader(token),
     })
-
     return response.data
 }

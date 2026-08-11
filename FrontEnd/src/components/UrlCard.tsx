@@ -13,9 +13,10 @@ interface UrlCardProps {
     url: Url
     onBack: () => void
     onDelete: (slug: string) => void
+    token?: string
 }
 
-export default function UrlCard({ url, onBack, onDelete }: UrlCardProps) {
+export default function UrlCard({ url, onBack, onDelete, token }: UrlCardProps) {
 
     const navigate = useNavigate()
     const expired = isUrlExpired(url.expires_at)
@@ -25,7 +26,7 @@ export default function UrlCard({ url, onBack, onDelete }: UrlCardProps) {
     }
 
     async function handleDelete() {
-        await deleteUrl(url.slug)
+        await deleteUrl(url.slug, token)
         onDelete(url.slug)
     }
 
@@ -44,7 +45,7 @@ export default function UrlCard({ url, onBack, onDelete }: UrlCardProps) {
                     <p className="urlCardNotice">{expired ? "This url is expired" : ""}</p>
                     <div className="url-card-buttons">
                         <button className="copyButton" onClick={copyToClipboard}>Copy URL</button>
-                        <button className="submitButton" onClick={() => navigate(`/metrics/${url.slug}`, { state: { slug: url.slug } })}>View Metrics</button>
+                        <button className="submitButton" onClick={() => navigate(`/metrics/${url.slug}`, { state: { token } })}>View Metrics</button>
                         <button className='deleteButton' onClick={handleDelete}>Delete Url</button>
                     </div>
                 </div>

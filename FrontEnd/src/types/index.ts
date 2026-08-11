@@ -1,3 +1,5 @@
+export type AppMode = 'local' | 'auth'
+
 export interface Url {
     slug: string
     original_url: string

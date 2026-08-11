@@ -1,6 +1,6 @@
 import './UrlForm.css'
 import axios from 'axios'
-import type { Url } from '../types'
+import type { Url, AppMode } from '../types'
 import { useRef, useState } from 'react'
 import { createUrl } from '../services/api'
 import { getExpirationDateBounds, isExpirationDateInRange } from '../utils/date'
@@ -8,9 +8,11 @@ import DatePicker from './DatePicker'
 
 interface UrlFormProps {
     onUrlCreated: (url: Url) => void
+    mode?: AppMode
+    token?: string
 }
 
-export default function UrlForm({ onUrlCreated }: UrlFormProps){
+export default function UrlForm({ onUrlCreated, mode = 'local', token }: UrlFormProps){
 
     const [isLoading, setIsLoading] = useState(false)
     const [url, setUrl] = useState("")
@@ -70,7 +72,7 @@ export default function UrlForm({ onUrlCreated }: UrlFormProps){
         console.log(isLoading)
 
         try {
-            const newUrl = await createUrl(url.trim(), expiresAt)
+            const newUrl = await createUrl(url.trim(), expiresAt, mode === 'auth' ? token : undefined)
             onUrlCreated(newUrl)
             setUrl("")
             setExpiresAt("")

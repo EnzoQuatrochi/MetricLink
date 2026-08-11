@@ -31,3 +31,5 @@ jobs:
 
       - name: Tests with pytest
         run: pytest 
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}

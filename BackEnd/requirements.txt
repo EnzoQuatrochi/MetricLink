@@ -8,3 +8,5 @@ pydantic
 redis
 testcontainers[postgres,redis]
 httpx
+python-jose[cryptography]
+bcrypt
