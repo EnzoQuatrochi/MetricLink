@@ -16,7 +16,7 @@
 .backButton {
     margin: 24px;
     padding: 10px 16px;
-    font-size: 0.9375rem;
+    font-size: 15px;
     font-weight: 500;
     background-color: var(--color-surface);
     color: var(--color-text);
@@ -48,7 +48,7 @@
 }
 
 .h1 h1 {
-    font-size: 1.5rem;
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.02em;
 }
@@ -58,7 +58,7 @@
 }
 
 .metricsData p {
-    font-size: 0.9375rem;
+    font-size: 15px;
     color: var(--color-text);
     margin-bottom: 6px;
 }
@@ -69,5 +69,5 @@
 
 .days p {
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: 14px;
 }

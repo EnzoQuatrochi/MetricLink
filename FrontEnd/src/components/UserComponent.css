@@ -17,7 +17,7 @@ h1{
 
 .subtitle{
     font-size: 17px;
-    margin-bottom: 5px;
+    margin: 5px 0;
 }
 
 label{
@@ -25,7 +25,8 @@ label{
 }
 
 .errorMsg {
-    color: #e05252;
-    font-size: 13px;
-    margin: 4px 0 8px;
+    color: #c62828;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
 }

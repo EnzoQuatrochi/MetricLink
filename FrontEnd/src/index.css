@@ -1,12 +1,12 @@
 :root {
     --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    --color-text: #1e293b;
-    --color-text-muted: #64748b;
-    --color-primary: #3b6ea5;
-    --color-primary-hover: #2f5885;
-    --color-surface: rgba(255, 255, 255, 0.88);
-    --color-sidebar: rgba(255, 255, 255, 0.72);
-    --color-border: rgba(59, 110, 165, 0.22);
+    --color-text: #f8fafc;
+    --color-text-muted: #94a3b8;
+    --color-primary: #60a5fa;
+    --color-primary-hover: #3b82f6;
+    --color-surface: rgba(255, 255, 255, 0.06);
+    --color-sidebar: rgba(255, 255, 255, 0.03);
+    --color-border: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -26,7 +26,7 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: var(--color-text);
-    background: linear-gradient(160deg, #dbeafe 0%, #e0e7ff 55%, #ede9fe 100%);
+    background: #1e293b; /* Softer dark blue/slate */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -34,11 +34,13 @@ h1 {
     font-weight: 700;
 }
 
-h2, h3 {
+h2,
+h3 {
     font-weight: 600;
 }
 
-p, label {
+p,
+label {
     font-weight: 400;
 }
 
@@ -55,4 +57,40 @@ button {
 input {
     font-family: inherit;
     font-size: 15px;
+}
+
+/* Background Animated Shapes */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.6;
+    animation: float 10s infinite ease-in-out alternate;
+}
+
+.shape-1 {
+    width: 400px;
+    height: 400px;
+    background: #60a5fa; /* Lighter version of #3b82f6 */
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 500px;
+    height: 500px;
+    background: #a78bfa; /* Lighter version of #8b5cf6 */
+    bottom: -150px;
+    right: -100px;
+    animation-delay: -3s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
 }

@@ -11,11 +11,21 @@ export default function Register(){
 
     async function handleRegister(email: string, password: string) {
         setError(undefined)
+
+        if (!email.trim()) {
+            setError('Email não pode ser vazio.')
+            return
+        }
+        if (!password.trim()) {
+            setError('Senha não pode ser vazia.')
+            return
+        }
+
         try {
             const token = await createUser(email, password)
-            navigate('/home', { state: { mode: 'auth', token } })
+            navigate('/home', { state: { mode: 'auth', token }, replace: true })
         } catch {
-            setError('Invalid email or password.')
+            setError('Erro ao criar conta. O email pode já estar em uso.')
         }
     }
 
