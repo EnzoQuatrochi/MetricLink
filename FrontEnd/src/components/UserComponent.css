@@ -24,6 +24,25 @@ label{
     margin-top: 20px;
 }
 
+.buttons {
+    margin: 24px 0 28px;
+}
+
+.buttons button {
+    padding: 10px 24px;
+    background-color: var(--color-primary);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.15s ease;
+}
+
+.buttons button:hover {
+    background-color: var(--color-primary-hover);
+}
+
 .errorMsg {
     color: #c62828;
     font-size: 15px;
