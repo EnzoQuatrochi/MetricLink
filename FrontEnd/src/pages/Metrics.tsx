@@ -10,7 +10,7 @@ export default function Metrics() {
     const { slug } = useParams<{ slug: string }>()
     const [metrics, setMetrics] = useState<MetricsHistory | null>(null)
     const location = useLocation()
-    const { token } = (location.state as { token?: string }) ?? {}
+    const { token, mode } = (location.state as { token?: string; mode?: string }) ?? {}
 
     useEffect(() => {
         async function fetchMetrics() {
@@ -25,7 +25,7 @@ export default function Metrics() {
     return (
         <div className="metrics">
             <div className='topButton'>
-                <button className="backButton" onClick={() => navigate(-1)}>🠔 Back</button>
+                <button className="backButton" onClick={() => navigate('/home', { state: { mode: mode ?? 'local', token, selectedSlug: slug } })}>🠔 Back</button>
             </div>
             <div className='metricsCard'>
                 <div className='h1'>

@@ -39,6 +39,8 @@
 }
 
 .card_form {
+    position: relative;
+    isolation: isolate;
     background: var(--color-surface);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -74,6 +76,10 @@
     font-weight: 500;
     padding-top: 10px;
     text-align: center;
+}
+
+.urlCardNotice--success {
+    color: #2e7d32;
 }
 
 .url-card-buttons {

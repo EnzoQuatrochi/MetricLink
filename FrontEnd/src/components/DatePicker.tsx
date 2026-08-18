@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { formatDateLocal } from '../utils/date'
 import './DatePicker.css'
 
@@ -10,9 +11,11 @@ interface DatePickerProps {
     placeholder?: string
 }
 
-export default function DatePicker({ value, onChange, minDate, maxDate, placeholder = "dd/mm/aaaa"}: DatePickerProps) {
+export default function DatePicker({ value, onChange, minDate, maxDate, placeholder = "dd/mm/aaaa" }: DatePickerProps) {
     const [isOpen, setIsOpen] = useState(false)
+    const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 })
     const containerRef = useRef<HTMLDivElement>(null)
+    const dropdownRef = useRef<HTMLDivElement>(null)
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -47,31 +50,38 @@ export default function DatePicker({ value, onChange, minDate, maxDate, placehol
     }
 
     const getDisplayValue = () => {
-
-        if (!value) {
-            return ""
-        } 
-
+        if (!value) return ""
         const parts = value.split('-')
-
-        if (parts.length !== 3) {
-            return value
-        }
-
+        if (parts.length !== 3) return value
         const [year, month, day] = parts
-
         return `${day}/${month}/${year}`
     }
 
+    const handleOpen = () => {
+        if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect()
+            setDropdownPos({
+                top: rect.bottom + window.scrollY + 6,
+                left: rect.left + window.scrollX,
+                width: rect.width,
+            })
+        }
+        setIsOpen(prev => !prev)
+    }
+
     useEffect(() => {
+        if (!isOpen) return
         function handleClickOutside(event: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            const target = event.target as Node
+            const insideContainer = containerRef.current?.contains(target)
+            const insideDropdown = dropdownRef.current?.contains(target)
+            if (!insideContainer && !insideDropdown) {
                 setIsOpen(false)
             }
         }
         document.addEventListener('mousedown', handleClickOutside)
         return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [])
+    }, [isOpen])
 
     const handleSelectDay = (dateStr: string) => {
         onChange(dateStr)
@@ -95,7 +105,7 @@ export default function DatePicker({ value, onChange, minDate, maxDate, placehol
 
     return (
         <div className="datePickerContainer" ref={containerRef}>
-            <div className="datePickerInputWrapper" onClick={() => setIsOpen(!isOpen)}>
+            <div className="datePickerInputWrapper" onClick={handleOpen}>
                 <input
                     type="text"
                     className="data datePickerInput"
@@ -110,50 +120,63 @@ export default function DatePicker({ value, onChange, minDate, maxDate, placehol
                 </span>
             </div>
 
-            {isOpen && (
-                <div className="datePickerDropdown">
-                    <div className="datePickerHeader">
-                        <span className="datePickerHeaderTitle">{getMonthsHeader()}</span>
-                    </div>
+            {isOpen && createPortal(
+                <>
+                    <div className="datePickerOverlay" onClick={() => setIsOpen(false)} />
+                    <div
+                        className="datePickerDropdown"
+                        ref={dropdownRef}
+                        style={{
+                            position: 'absolute',
+                            top: dropdownPos.top,
+                            left: dropdownPos.left,
+                            width: dropdownPos.width,
+                        }}
+                    >
+                        <div className="datePickerHeader">
+                            <span className="datePickerHeaderTitle">{getMonthsHeader()}</span>
+                        </div>
 
-                    <div className="datePickerWeekdays">
-                        {weekDays.map((wd, index) => (
-                            <div key={index} className="datePickerWeekday">
-                                {wd}
-                            </div>
-                        ))}
-                    </div>
+                        <div className="datePickerWeekdays">
+                            {weekDays.map((wd, index) => (
+                                <div key={index} className="datePickerWeekday">
+                                    {wd}
+                                </div>
+                            ))}
+                        </div>
 
-                    <div className="datePickerGrid">
-                        {days.map((d, index) => {
-                            const dateStr = formatDateLocal(d)
-                            const isValid = dateStr >= minDate && dateStr <= maxDate
-                            const isSelected = dateStr === value
-                            const isToday = dateStr === formatDateLocal(new Date())
+                        <div className="datePickerGrid">
+                            {days.map((d, index) => {
+                                const dateStr = formatDateLocal(d)
+                                const isValid = dateStr >= minDate && dateStr <= maxDate
+                                const isSelected = dateStr === value
+                                const isToday = dateStr === formatDateLocal(new Date())
 
-                            return (
-                                <button
-                                    key={index}
-                                    type="button"
-                                    disabled={!isValid}
-                                    onClick={() => handleSelectDay(dateStr)}
-                                    className={`datePickerDay ${isSelected ? 'datePickerDay--selected' : ''} ${isToday ? 'datePickerDay--today' : ''} ${!isValid ? 'datePickerDay--disabled' : ''}`}
-                                >
-                                    {d.getDate()}
-                                </button>
-                            )
-                        })}
-                    </div>
+                                return (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        disabled={!isValid}
+                                        onClick={() => handleSelectDay(dateStr)}
+                                        className={`datePickerDay ${isSelected ? 'datePickerDay--selected' : ''} ${isToday ? 'datePickerDay--today' : ''} ${!isValid ? 'datePickerDay--disabled' : ''}`}
+                                    >
+                                        {d.getDate()}
+                                    </button>
+                                )
+                            })}
+                        </div>
 
-                    <div className="datePickerFooter">
-                        <button type="button" className="datePickerFooterBtn" onClick={handleClear}>
-                            Limpar
-                        </button>
-                        <button type="button" className="datePickerFooterBtn" onClick={handleSelectToday}>
-                            Hoje
-                        </button>
+                        <div className="datePickerFooter">
+                            <button type="button" className="datePickerFooterBtn" onClick={handleClear}>
+                                Limpar
+                            </button>
+                            <button type="button" className="datePickerFooterBtn" onClick={handleSelectToday}>
+                                Hoje
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </>,
+                document.body
             )}
         </div>
     )

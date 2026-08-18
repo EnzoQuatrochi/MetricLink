@@ -19,7 +19,7 @@ export default function Home() {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const { mode, token } = (location.state as HomeState) ?? { mode: 'local' }
+    const { mode, token, selectedSlug: initialSlug } = (location.state as HomeState & { selectedSlug?: string }) ?? { mode: 'local' }
 
     const [urls, setUrls] = useState<Url[]>(() => {
         if (mode === 'local') {
@@ -34,7 +34,7 @@ export default function Home() {
         }
     }, [mode, token])
 
-    const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
+    const [selectedSlug, setSelectedSlug] = useState<string | null>(initialSlug ?? null)
     const [isConfigOpen, setIsConfigOpen] = useState(false)
 
     const displayUrl = selectedSlug
@@ -85,7 +85,7 @@ export default function Home() {
             <h1 className='title'>MetricLink</h1>
             <div className='home'>
                 {displayUrl
-                    ? <UrlCard url={displayUrl} onBack={handleBack} onDelete={handleDelete} token={token} />
+                    ? <UrlCard url={displayUrl} onBack={handleBack} onDelete={handleDelete} token={token} mode={mode} />
                     : <UrlForm onUrlCreated={handleUrlCreated} mode={mode} token={token} />
                 }
             </div>
