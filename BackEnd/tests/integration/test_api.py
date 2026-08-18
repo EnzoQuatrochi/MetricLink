@@ -44,7 +44,7 @@ def client(postgres, redis_conn):
     app.dependency_overrides[get_metric_repository] = lambda: MetricRepositoryImplementation(postgres)
     app.dependency_overrides[get_cache] = lambda: CacheService(redis_conn)
     app.dependency_overrides[get_user_repository] = lambda: UserRepositoryImplementation(postgres)
-    yield TestClient(app)
+    yield TestClient(app, raise_server_exceptions=False)
     app.dependency_overrides.clear()
 
 @pytest.fixture(scope="module")
@@ -102,3 +102,37 @@ def test_get_metrics_history(client, auth_token):
 
     assert response.status_code == 200
     assert "total_clicks" in response.json()
+
+def test_register(client):
+
+    response = client.post("/auth/register", json={
+        "email": "newuser@test.com",
+        "password": "password123"
+    })
+
+    assert response.status_code == 200
+    assert response.json()["message"] == "User created successfully"
+
+def test_login(client):
+
+    client.post("/auth/register", json={
+        "email": "loginuser@test.com",
+        "password": "password123"
+    })
+
+    response = client.post("/auth/login", data={
+        "username": "loginuser@test.com",
+        "password": "password123"
+    })
+
+    assert response.status_code == 200
+    assert "access_token" in response.json()
+
+def test_login_invalid(client):
+
+    response = client.post("/auth/login", data={
+        "username": "naoexiste@test.com",
+        "password": "wrongpassword"
+    })
+
+    assert response.status_code == 500
