@@ -1,6 +1,6 @@
 # MetricLink
 
-**MetricLink** is a URL shortener with click metrics tracking. The project lets you create short links with an expiration date, redirect visitors to the original URL, and view access statistics (total clicks and per-day history).
+**MetricLink** is a URL shortener with click metrics tracking. The project lets you create short links with an expiration date, redirect visitors to the original URL, and view access statistics.
 
 This repository is a **monorepo**: the frontend and backend live in the same Git repository, but they are independent applications with their own dependencies, scripts, and development workflow.
 

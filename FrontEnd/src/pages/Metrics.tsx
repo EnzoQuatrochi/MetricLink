@@ -42,6 +42,7 @@ export default function Metrics() {
                                 ))}
                             </div>
                         </div>
+                        <hr></hr>
                         <MetricsChart history={metrics.history} />
                     </>
                 ) : (
