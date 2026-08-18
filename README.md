@@ -23,8 +23,6 @@ This repository is a **monorepo**: the frontend and backend live in the same Git
 - [Monorepo structure](#monorepo-structure)
 - [Technologies](#technologies)
 - [Architecture](#architecture)
-- [Pre-requisites](#pre-requisites)
-- [Running the project locally](#running-the-project-locally)
 - [Deployment](#deployment)
 - [REST API](#rest-api)
 - [Tests](#tests)
@@ -33,11 +31,6 @@ This repository is a **monorepo**: the frontend and backend live in the same Git
 ---
 
 ## Overview
-
-| Layer    | Folder      | Main role                                           |
-|----------|-------------|-----------------------------------------------------|
-| Frontend | `FrontEnd/` | Web UI to create URLs and view metrics              |
-| Backend  | `BackEnd/`  | REST API, redirects, persistence, and cache         |
 
 Typical flow:
 
@@ -54,10 +47,11 @@ Typical flow:
 MetricLink/
 ├── FrontEnd/                 # React application (SPA)
 │   ├── src/
-│   │   ├── components/       # UrlForm, UrlCard, Sidebar, MetricsChart
-│   │   ├── pages/            # Home, Metrics
+│   │   ├── components/       # UrlForm, UrlCard, Sidebar, MetricsChart, ConfigComponent, UserComponent
+│   │   ├── pages/            # Landing, Home, Metrics, Login, Register
 │   │   ├── services/         # HTTP client (axios) for the API
 │   │   ├── types/            # Shared TypeScript types
+│   │   ├── utils/            # Utility helpers (e.g. date formatting)
 │   │   ├── App.tsx           # Application routes
 │   │   └── main.tsx          # Entry point
 │   ├── package.json
@@ -65,14 +59,23 @@ MetricLink/
 │
 ├── BackEnd/                  # Python API (FastAPI)
 │   ├── src/
-│   │   ├── domain/           # Entities, exceptions, and contracts (repositories)
-│   │   ├── application/      # Use cases (business rules)
-│   │   └── infrastructure/   # HTTP, database, cache, concrete implementations
-│   │       └── http/
-│   │           └── dependencies.py  # FastAPI dependency providers (DI)
+│   │   ├── domain/           # Entities (Url, User), exceptions, and contracts (repositories)
+│   │   ├── application/
+│   │   │   └── use_cases/
+│   │   │       ├── url/      # CreateUrl, RedirectUrl, GetMetrics, GetUrlsByUser, DeleteUrl
+│   │   │       └── user/     # Login, Register
+│   │   └── infrastructure/   # HTTP, database, cache, auth — concrete implementations
+│   │       ├── http/
+│   │       │   ├── dependencies.py  # FastAPI dependency providers (DI)
+│   │       │   ├── url_router.py
+│   │       │   └── user_router.py
+│   │       ├── database/     # PostgreSQL repositories
+│   │       ├── cache/        # Redis (CacheService)
+│   │       └── auth/         # JWT service
 │   ├── tests/
 │   │   ├── fake/             # In-memory fakes for unit tests
-│   │   └── integration/      # Integration tests (PostgreSQL, Redis, API)
+│   │   ├── integration/      # Integration tests (PostgreSQL, Redis, API)
+│   │   └── test_*.py         # Unit tests for use cases and domain
 │   ├── run.ps1               # Start the API locally (Windows)
 │   ├── requirements.txt
 │   └── .env.exemple          # Environment variables template
@@ -94,7 +97,7 @@ MetricLink/
 | **Vite**         | Bundler and dev server (HMR)                       |
 | **React Router** | Routing (`/` and `/metrics/:slug`)                 |
 | **Axios**        | HTTP calls to the API                              |
-| **Recharts**     | Per-day click charts                               |
+| **Recharts**     | Grapich Metrics                                    |
 | **ESLint**       | TypeScript/React linting                           |
 
 Deployed at **https://metric-link.vercel.app/** via [Vercel](https://vercel.com/).
@@ -129,42 +132,54 @@ The backend follows **Clean Architecture** in layers: business rules at the cent
 │  infrastructure/http        FastAPI, DI providers, schemas  │
 │  infrastructure/database    PostgreSQL repositories         │
 │  infrastructure/cache       Redis (CacheService)            │
+│  infrastructure/auth        JWT service                     │
 └───────────────────────────┬─────────────────────────────────┘
                             │ depends on
 ┌───────────────────────────▼─────────────────────────────────┐
-│  application/use_cases      CreateUrl, RedirectUrl,         │
-│                             GetMetrics, DeleteUrl           │
+│  application/use_cases/url  CreateUrl, RedirectUrl,         │
+│                             GetMetrics, GetUrlsByUser,      │
+│                             DeleteUrl                       │
+│  application/use_cases/user Login, Register                 │
 └───────────────────────────┬─────────────────────────────────┘
                             │ depends on
 ┌───────────────────────────▼─────────────────────────────────┐
-│  domain/                    Url (entity), UrlRepository,    │
-│                             MetricRepository, exceptions    │
+│  domain/                    Url, User (entities),           │
+│                             UrlRepository, MetricRepository,│
+│                             UserRepository, exceptions      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 **Main use cases:**
 
-| Use case      | Responsibility                                                                 |
-|---------------|--------------------------------------------------------------------------------|
-| `CreateUrl`   | Generates a secure slug, caps expiration at 30 days, and saves the URL         |
-| `RedirectUrl` | Reads Redis cache; if missing, queries the DB, validates expiration, caches    |
-| `GetMetrics`  | Total clicks, clicks per day, and history                                      |
-| `DeleteUrl`   | Removes a URL by slug                                                          |
+| Use case         | Responsibility                                                                 |
+|------------------|--------------------------------------------------------------------------------|
+| `CreateUrl`      | Generates a secure slug, caps expiration at 30 days, and saves the URL         |
+| `RedirectUrl`    | Reads Redis cache; if missing, queries the DB, validates expiration, caches    |
+| `GetMetrics`     | Total clicks, clicks per day, and history                                      |
+| `GetUrlsByUser`  | Returns all URLs created by an authenticated user                              |
+| `DeleteUrl`      | Removes a URL by slug                                                          |
+| `Register`       | Creates a new user account with a hashed password                              |
+| `Login`          | Validates credentials and issues a JWT access token                            |
 
-In the domain, contracts such as `UrlRepository` enable **dependency inversion**; entities expose behavior (`Url.is_expired()`), and business errors become typed exceptions (`UrlNotFoundError`, `ExpiredUrlError`).
+In the domain, contracts such as `UrlRepository` and `UserRepository` enable **dependency inversion**; entities expose behavior (`Url.is_expired()`), and business errors become typed exceptions (`UrlNotFoundError`, `ExpiredUrlError`, `UserNotFoundError`, `InvalidCredentialsError`).
 
-At the HTTP layer, **dependency injection** is handled by FastAPI: `BackEnd/src/infrastructure/http/dependencies.py` exposes provider functions (`get_url_repository`, `get_metric_repository`, `get_cache`), and routes in `url_router.py` receive them via `Depends(...)`. This keeps use cases decoupled from concrete implementations and allows integration tests to override dependencies with real PostgreSQL/Redis instances through `app.dependency_overrides`.
+At the HTTP layer, **dependency injection** is handled by FastAPI: `BackEnd/src/infrastructure/http/dependencies.py` exposes provider functions (`get_url_repository`, `get_metric_repository`, `get_cache`, `get_user_repository`, `get_current_user`), and routes in `url_router.py` and `user_router.py` receive them via `Depends(...)`. This keeps use cases decoupled from concrete implementations and allows integration tests to override dependencies with real PostgreSQL/Redis instances through `app.dependency_overrides`.
+
+Authentication uses **JWT** tokens (issued at login, validated by `get_current_user`). URL creation also accepts unauthenticated requests via `get_optional_user`.
 
 Unit tests use **fakes** in `BackEnd/tests/fake/` with the same interfaces as production.
 
-**Persistence:** the script `BackEnd/src/infrastructure/database/schema.sql` defines the `urls` and `metrics` tables.
+**Persistence:** the script `BackEnd/src/infrastructure/database/schema.sql` defines the `urls`, `metrics`, and `users` tables.
 
 **Cache:** on each successful redirect, the original URL is stored in Redis with a TTL until the link expires, reducing PostgreSQL queries.
 
 ### Frontend — SPA with routing
 
-- **`/` (Home):** form to shorten URLs, sidebar with created links (stored in `localStorage`), and a card with the selected link details.
+- **`/` (Landing):** public landing page.
+- **`/home` (Home):** form to shorten URLs, sidebar with created links, and a card with the selected link details. Requires authentication.
 - **`/metrics/:slug` (Metrics):** metrics page with totals, per-day list, and chart (Recharts).
+- **`/login` (Login):** user login form.
+- **`/register` (Register):** user registration form.
 
 The backend is accessed via `FrontEnd/src/services/api.ts`, which points to `https://metriclink.duckdns.org`.
 
@@ -185,21 +200,12 @@ Browser
    │                                           ▼
    └── https://metriclink.duckdns.org     → Oracle VM (Ubuntu 24)
                                                ├── Nginx (reverse proxy + TLS)
-                                               ├── Uvicorn / FastAPI (port 8000)
+                                               ├── Uvicorn / FastAPI
                                                ├── PostgreSQL
                                                └── Redis
 ```
 
-
 ## REST API
-
-| Method   | Endpoint               | Description                                        |
-|----------|------------------------|----------------------------------------------------|
-| `POST`   | `/urls`                | Create short URL (`original_url`, `expires_at`)    |
-| `GET`    | `/{slug}`              | Redirect (302) and record click                    |
-| `GET`    | `/urls/{slug}/metrics` | Metrics for a day (`day` as query param)           |
-| `GET`    | `/urls/{slug}/history` | Total and per-day click history                    |
-| `DELETE` | `/urls/{slug}`         | Remove URL by slug                                 |
 
 Full interactive documentation at **https://metriclink.duckdns.org/docs**.
 
@@ -210,28 +216,8 @@ Full interactive documentation at **https://metriclink.duckdns.org/docs**.
 Tests cover the entire **backend** and are split into two layers:
 
 - **Unit tests** — exercise the domain and use cases in memory, without PostgreSQL, Redis, or the API.
-- **Integration tests** — spin up real PostgreSQL and Redis instances via [Testcontainers](https://testcontainers.com/) (requires **Docker**) and validate repositories, cache, and HTTP endpoints end-to-end.
-
-### What is tested
-
-**Unit tests**
-
-| File                     | Focus                                                          |
-|--------------------------|----------------------------------------------------------------|
-| `test_create_url.py`     | Slug generated, URL persisted, expiration capped at 30 days    |
-| `test_redirect_url.py`   | Original URL returned, `ExpiredUrlError`, `UrlNotFoundError`   |
-| `test_get_metrics.py`    | Total count, clicks per day, and date filter                   |
-| `test_url.py`            | `Url.is_expired()` for valid and expired links                 |
-| `test_url_exceptions.py` | Domain exception types and messages                            |
-
-**Integration tests**
-
-| File                                    | Focus                                                     |
-|-----------------------------------------|-----------------------------------------------------------|
-| `integration/test_api.py`               | Create URL, redirect (302), and metrics history via HTTP  |
-| `integration/test_url_repository.py`    | Save and retrieve URLs in PostgreSQL                      |
-| `integration/test_metric_repository.py` | Click registration, per-day count, and history            |
-| `integration/test_cache_service.py`     | Redis get/set/delete with TTL                             |
+- **Integration tests** — spin up real PostgreSQL and Redis instances via [Testcontainers](https://testcontainers.com/) 
+and validate repositories, cache, and HTTP endpoints end-to-end.
 
 ### Fakes (unit tests)
 
@@ -240,6 +226,7 @@ Instead of mocking external libraries, unit tests use **fakes** — simple imple
 - `FakeUrlRepository` stores URLs in a dictionary (`slug → Url`).
 - `FakeMetricRepository` accumulates clicks in memory.
 - `FakeCacheService` simulates get/set/delete without Redis.
+- `FakeUserRepository` stores users in memory for auth use case tests.
 
 This keeps tests fast, deterministic, and aligned with Clean Architecture: the use case receives the same interface it would use in production.
 
