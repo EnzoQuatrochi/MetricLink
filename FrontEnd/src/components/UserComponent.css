@@ -1,51 +1,108 @@
-.userComponent{
+.userComponent {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 550px;
+    width: 500px;
     max-width: 100%;
-    padding: 8px 32px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    padding: 36px 40px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4), 0 0 30px rgba(96, 165, 250, 0.08);
+}
+
+.userComponent h1 {
+    margin: 0 0 8px;
+    font-size: 40px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #38bdf8);
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 15px;
+    color: #94a3b8;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+.properties {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.properties label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #cbd5e1;
+    margin-top: 16px;
+    margin-bottom: 6px;
+}
+
+.properties .data {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #f8fafc;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s ease;
 }
 
-h1{
-    margin-top: 25px;
-}
-
-.subtitle{
-    font-size: 17px;
-    margin: 5px 0;
-}
-
-label{
-    margin-top: 20px;
+.properties .data:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    background: rgba(15, 23, 42, 0.85);
 }
 
 .buttons {
-    margin: 24px 0 28px;
+    width: 100%;
+    margin: 28px 0 8px;
+    display: flex;
+    justify-content: center;
 }
 
 .buttons button {
-    padding: 10px 24px;
-    background-color: var(--color-primary);
+    width: 30%;
+    padding: 13px 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     color: #fff;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.15s ease;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .buttons button:hover {
-    background-color: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+.buttons button:active {
+    transform: translateY(0);
 }
 
 .errorMsg {
-    color: #c62828;
-    font-size: 15px;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
     font-weight: 500;
     margin-top: 16px;
+    width: 100%;
+    text-align: center;
 }

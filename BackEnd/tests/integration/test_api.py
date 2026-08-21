@@ -49,7 +49,7 @@ def client(postgres, redis_conn):
 
 @pytest.fixture(scope="module")
 def auth_token(client):
-    register = client.post("/auth/register", json={"email": "test@test.com", "password": "test123"})
+    register = client.post("/auth/register", json={"name": "test@test.com", "password": "test123"})
     print("Register:", register.status_code, register.json())
     login = client.post("/auth/login", data={"username": "test@test.com", "password": "test123"})
     print("Login:", login.status_code, login.json())
@@ -106,7 +106,7 @@ def test_get_metrics_history(client, auth_token):
 def test_register(client):
 
     response = client.post("/auth/register", json={
-        "email": "newuser@test.com",
+        "name": "newuser@test.com",
         "password": "password123"
     })
 
@@ -116,7 +116,7 @@ def test_register(client):
 def test_login(client):
 
     client.post("/auth/register", json={
-        "email": "loginuser@test.com",
+        "name": "loginuser@test.com",
         "password": "password123"
     })
 

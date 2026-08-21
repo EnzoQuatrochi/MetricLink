@@ -7,10 +7,14 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 36px;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--color-text);
+    top: 50px;
+    font-size: 50px;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #38bdf8);
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
 }
 
 .home {
@@ -63,7 +67,6 @@ svg {
     fill: var(--color-text);
 }
 
-/* Sleek Grid Background for Home */
 .home-background {
     position: fixed;
     top: 0;
@@ -71,10 +74,8 @@ svg {
     width: 100vw;
     height: 100vh;
     z-index: -1;
-    background-image: 
-        linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
 }
 
 .home-background::before {
@@ -84,8 +85,9 @@ svg {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Very soft, subtle ambient colors to keep tones weaker than landing */
-    background: radial-gradient(circle at 50% 0%, rgba(30, 64, 175, 0.15), transparent 60%),
-                radial-gradient(circle at 0% 100%, rgba(15, 118, 110, 0.1), transparent 50%);
+    background: 
+        radial-gradient(circle at 50% 45%, rgba(192, 132, 252, 0.15) 0%, rgba(96, 165, 250, 0.12) 35%, rgba(56, 189, 248, 0.06) 60%, transparent 75%),
+        radial-gradient(ellipse at 50% 0%, rgba(96, 165, 250, 0.18), transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(192, 132, 252, 0.14), transparent 50%);
     pointer-events: none;
 }

@@ -26,20 +26,20 @@ def repo(postgres):
 
 def test_create_user(repo):
 
-    user = User(email="teste@teste.com", password_hash="password")
+    user = User(name="teste@teste.com", password_hash="password")
     repo.create_user(user)
-    result = repo.get_user_by_email("teste@teste.com")
+    result = repo.get_user_by_name("teste@teste.com")
 
-    assert result.email == "teste@teste.com"
+    assert result.name == "teste@teste.com"
     assert result.password_hash == "password"
 
-def test_get_user_by_email(repo):
+def test_get_user_by_name(repo):
 
-    user = User(email="teste2@teste.com", password_hash="password2")
+    user = User(name="teste2@teste.com", password_hash="password2")
     repo.create_user(user)
 
-    result = repo.get_user_by_email("teste2@teste.com")
+    result = repo.get_user_by_name("teste2@teste.com")
 
     assert result is not None 
-    assert result.email == "teste2@teste.com"
+    assert result.name == "teste2@teste.com"
     assert result.password_hash == "password2"

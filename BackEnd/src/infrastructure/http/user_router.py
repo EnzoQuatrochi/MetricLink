@@ -12,7 +12,7 @@ def create_user(request: RegisterRequest, repository = Depends(get_user_reposito
 
     use_case = Register(repository)
 
-    use_case.execute(request.email, request.password)
+    use_case.execute(request.name, request.password)
 
     return {"message": "User created successfully"}
 

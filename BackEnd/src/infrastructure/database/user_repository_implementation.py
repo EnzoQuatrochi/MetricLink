@@ -13,15 +13,15 @@ class UserRepositoryImplementation(UserRepository):
 
         with self.connection.cursor() as cursor:
 
-            cursor.execute("INSERT INTO users (email, password_hash) VALUES (%s, %s)",
-                (user.email, user.password_hash))
+            cursor.execute("INSERT INTO users (name, password_hash) VALUES (%s, %s)",
+                (user.name, user.password_hash))
             self.connection.commit()
 
-    def get_user_by_email(self, email: str) -> Optional[User]:
+    def get_user_by_name(self, name: str) -> Optional[User]:
 
         with self.connection.cursor() as cursor:
 
-            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+            cursor.execute("SELECT * FROM users WHERE name = %s", (name,))
 
             user = cursor.fetchone()
 
@@ -29,4 +29,4 @@ class UserRepositoryImplementation(UserRepository):
 
                 return None
 
-            return User(id=user[0], email=user[1], password_hash=user[2])
+            return User(id=user[0], name=user[1], password_hash=user[2])

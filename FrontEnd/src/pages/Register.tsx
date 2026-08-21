@@ -9,23 +9,23 @@ export default function Register(){
     const navigate = useNavigate()
     const [error, setError] = useState<string | undefined>()
 
-    async function handleRegister(email: string, password: string) {
+    async function handleRegister(name: string, password: string) {
         setError(undefined)
 
-        if (!email.trim()) {
-            setError('Email não pode ser vazio.')
+        if (!name.trim()) {
+            setError("Name can't be empty")
             return
         }
         if (!password.trim()) {
-            setError('Senha não pode ser vazia.')
+            setError("Password can't be empty")
             return
         }
 
         try {
-            const token = await createUser(email, password)
+            const token = await createUser(name, password)
             navigate('/home', { state: { mode: 'auth', token }, replace: true })
         } catch {
-            setError('Erro ao criar conta. O email pode já estar em uso.')
+            setError('Error to create account. This name could already be used.')
         }
     }
 

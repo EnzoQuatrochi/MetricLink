@@ -7,11 +7,11 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
-def create_token(email: str) -> str:
+def create_token(name: str) -> str:
 
     expires = datetime.now() + timedelta(hours=24)
 
-    payload = {"sub": email, "exp": expires}
+    payload = {"sub": name, "exp": expires}
 
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 

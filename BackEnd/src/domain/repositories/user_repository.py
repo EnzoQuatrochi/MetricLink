@@ -10,6 +10,6 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    def get_user_by_email(self, email: str) -> Optional[User]:
+    def get_user_by_name(self, name: str) -> Optional[User]:
 
         pass

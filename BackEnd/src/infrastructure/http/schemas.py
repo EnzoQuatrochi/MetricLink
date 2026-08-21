@@ -12,12 +12,12 @@ class UrlResponse(BaseModel):
     expires_at: datetime
 
 class RegisterRequest(BaseModel):
-    email: str
+    name: str
     password: str
 
 class LoginRequest(BaseModel):
-    email: str
+    name: str
     password: str
 
 class UserResponse(BaseModel):
-    email: str
+    name: str

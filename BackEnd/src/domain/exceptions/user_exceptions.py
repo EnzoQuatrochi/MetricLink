@@ -8,7 +8,7 @@ class InvalidCredentialsError(Exception):
 
     def __init__(self):
 
-        super().__init__("Email ou password incorrect. Try again.")
+        super().__init__("Name or password incorrect. Try again.")
 
 class UserNotFoundError(Exception):
 

@@ -5,6 +5,46 @@
     justify-content: center;
     min-height: 100vh;
     padding: 80px 24px 40px;
+    position: relative;
+}
+
+.metrics-title {
+    position: relative;
+    top: -60px;
+    font-size: 50px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    white-space: nowrap;
+}
+
+.metrics::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+}
+
+.metrics::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 50% 45%, rgba(192, 132, 252, 0.15) 0%, rgba(96, 165, 250, 0.12) 35%, rgba(56, 189, 248, 0.06) 60%, transparent 75%),
+        radial-gradient(ellipse at 50% 0%, rgba(96, 165, 250, 0.18), transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(192, 132, 252, 0.14), transparent 50%);
+    pointer-events: none;
 }
 
 .topButton {
@@ -36,8 +76,8 @@
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 28px 32px;
-    max-width: 640px;
-    width: 100%;
+    min-width: 650px;
+    max-width: 100%;
 }
 
 .h1 {
@@ -49,12 +89,6 @@
 
 .h1 h1 {
     font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-}
-
-.metricsData {
-    margin-left: 0;
 }
 
 .metricsData p {
@@ -65,9 +99,16 @@
 
 .days {
     padding-left: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
 }
 
 .days p {
-    color: var(--color-text-muted);
+    color: #e7e7e7;
     font-size: 14px;
+}
+
+hr {
+    margin-top: 20px;
 }

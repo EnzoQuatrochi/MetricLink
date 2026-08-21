@@ -1,5 +1,5 @@
-import './ConfigComponent.css'
 import './ConfirmDialog.css'
+import './ConfigComponent.css'
 
 interface ConfirmDialogProps {
     message: string
@@ -13,8 +13,8 @@ export default function ConfirmDialog({ message, onConfirm, onCancel }: ConfirmD
             <div className='configComponent confirmDialog' onClick={(e) => e.stopPropagation()}>
                 <p className='confirmDialog-message'>{message}</p>
                 <div className='confirmDialog-buttons'>
-                    <button className='confirmDialog-cancel' onClick={onCancel}>Não</button>
-                    <button className='confirmDialog-confirm' onClick={onConfirm}>Sim</button>
+                    <button className='confirmDialog-cancel' onClick={onCancel}>No</button>
+                    <button className='confirmDialog-confirm' onClick={onConfirm}>Yes</button>
                 </div>
             </div>
         </div>

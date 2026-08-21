@@ -72,7 +72,7 @@ export default function UrlCard({ url, onBack, onDelete, token, mode }: UrlCardP
         <>
         {showConfirm && (
             <ConfirmDialog
-                message="Deseja excluir essa url permanentemente?"
+                message="Delete this url permanently?"
                 onConfirm={handleDelete}
                 onCancel={() => setShowConfirm(false)}
             />

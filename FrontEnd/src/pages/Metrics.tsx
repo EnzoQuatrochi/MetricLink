@@ -27,6 +27,7 @@ export default function Metrics() {
             <div className='topButton'>
                 <button className="backButton" onClick={() => navigate('/home', { state: { mode: mode ?? 'local', token, selectedSlug: slug } })}>🠔 Back</button>
             </div>
+            <h1 className="metrics-title">MetricLink</h1>
             <div className='metricsCard'>
                 <div className='h1'>
                     <h1>Metrics from {slug}</h1>
@@ -42,6 +43,7 @@ export default function Metrics() {
                                 ))}
                             </div>
                         </div>
+                        <hr></hr>
                         <MetricsChart history={metrics.history} />
                     </>
                 ) : (

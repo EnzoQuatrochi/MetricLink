@@ -71,7 +71,7 @@ export default function Home() {
             {!displayUrl && (
                 <div className='config'>
                     <button className="configButton" onClick={() => setIsConfigOpen(true)}>
-                        <img src="/config.png" alt="Configurações" width="24" height="24" />
+                        <img src="/config.png" alt="Configurations" width="24" height="24" />
                     </button>
                 </div>
             )}
