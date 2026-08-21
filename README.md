@@ -45,43 +45,43 @@ Typical flow:
 
 ```
 MetricLink/
-├── FrontEnd/                 # React application (SPA)
+├── FrontEnd/                        # React application (SPA)
 │   ├── src/
-│   │   ├── components/       # UrlForm, UrlCard, Sidebar, MetricsChart, ConfigComponent, UserComponent
-│   │   ├── pages/            # Landing, Home, Metrics, Login, Register
-│   │   ├── services/         # HTTP client (axios) for the API
-│   │   ├── types/            # Shared TypeScript types
-│   │   ├── utils/            # Utility helpers (e.g. date formatting)
-│   │   ├── App.tsx           # Application routes
-│   │   └── main.tsx          # Entry point
+│   │   ├── components/              # UrlForm, UrlCard, Sidebar, MetricsChart, UserComponent
+│   │   ├── pages/                   # Landing, Home, Metrics, Login, Register
+│   │   ├── services/                # HTTP client (axios) for the API
+│   │   ├── types/                   # Shared TypeScript types
+│   │   ├── utils/                   # Utility helpers (e.g. date formatting)
+│   │   ├── App.tsx                  # Application routes
+│   │   └── main.tsx                 # Entry point
 │   ├── package.json
 │   └── vite.config.ts
 │
-├── BackEnd/                  # Python API (FastAPI)
+├── BackEnd/                         # Python API (FastAPI)
 │   ├── src/
-│   │   ├── domain/           # Entities (Url, User), exceptions, and contracts (repositories)
+│   │   ├── domain/                  # Entities (Url, User), exceptions and contracts (repositories)
 │   │   ├── application/
 │   │   │   └── use_cases/
-│   │   │       ├── url/      # CreateUrl, RedirectUrl, GetMetrics, GetUrlsByUser, DeleteUrl
-│   │   │       └── user/     # Login, Register
-│   │   └── infrastructure/   # HTTP, database, cache, auth — concrete implementations
+│   │   │       ├── url/             # CreateUrl, RedirectUrl, GetMetrics, GetUrlsByUser, DeleteUrl
+│   │   │       └── user/            # Login, Register
+│   │   └── infrastructure/          # HTTP, database, cache, auth — concrete implementations
 │   │       ├── http/
 │   │       │   ├── dependencies.py  # FastAPI dependency providers (DI)
 │   │       │   ├── url_router.py
 │   │       │   └── user_router.py
-│   │       ├── database/     # PostgreSQL repositories
-│   │       ├── cache/        # Redis (CacheService)
-│   │       └── auth/         # JWT service
+│   │       ├── database/            # PostgreSQL repositories
+│   │       ├── cache/               # Redis (CacheService)
+│   │       └── auth/                # JWT service
 │   ├── tests/
-│   │   ├── fake/             # In-memory fakes for unit tests
-│   │   ├── integration/      # Integration tests (PostgreSQL, Redis, API)
-│   │   └── test_*.py         # Unit tests for use cases and domain
-│   ├── run.ps1               # Start the API locally (Windows)
+│   │   ├── fake/                    # In-memory fakes for unit tests
+│   │   ├── integration/             # Integration tests (PostgreSQL, Redis, API)
+│   │   └── test_*.py                # Unit tests for use cases and domain
+│   ├── run.ps1                      # Start the API locally (Windows)
 │   ├── requirements.txt
-│   └── .env.exemple          # Environment variables template
+│   └── .env.exemple                 # Environment variables template
 │
-├── .github/workflows/        # CI pipeline (GitHub Actions)
-└── README.md                 # This file
+├── .github/workflows/               # CI pipeline (GitHub Actions)
+└── README.md                        # This file
 ```
 
 ---
