@@ -7,9 +7,9 @@ function authHeader(token?: string) {
     return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
-export async function loginUser(email: string, password: string): Promise<string> {
+export async function loginUser(name: string, password: string): Promise<string> {
     const formData = new URLSearchParams()
-    formData.append('username', email)
+    formData.append('username', name)
     formData.append('password', password)
 
     const response = await axios({
@@ -22,18 +22,18 @@ export async function loginUser(email: string, password: string): Promise<string
     return response.data.access_token
 }
 
-export async function createUser(email: string, password: string): Promise<string> {
+export async function createUser(name: string, password: string): Promise<string> {
     await axios({
         method: 'post',
         url: `${BASE_URL}/auth/register`,
         headers: { 'Content-Type': 'application/json' },
         data: {
-            email: email,
+            name: name,
             password: password,
         },
     })
 
-    return loginUser(email, password)
+    return loginUser(name, password)
 }
 
 export async function createUrl(originalUrl: string, expires_at: string, token?: string): Promise<Url> {

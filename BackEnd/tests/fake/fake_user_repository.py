@@ -10,8 +10,8 @@ class FakeUserRepository(UserRepository):
     
     def create_user(self, user: User) -> None:
 
-        self.users[user.email] = user
+        self.users[user.name] = user
 
-    def get_user_by_email(self, email: str) -> Optional[User]:
+    def get_user_by_name(self, name: str) -> Optional[User]:
 
-        return self.users.get(email)
+        return self.users.get(name)

@@ -19,7 +19,7 @@ def favicon():
 @router.post("/urls")
 def create_url(request: CreateUrlRequest, repository = Depends(get_url_repository), user_repository = Depends(get_user_repository), current_user = Depends(get_optional_user)):
 
-    user = user_repository.get_user_by_email(current_user)
+    user = user_repository.get_user_by_name(current_user)
 
     use_case = CreateUrl(repository)
 
@@ -36,7 +36,7 @@ def create_url(request: CreateUrlRequest, repository = Depends(get_url_repositor
 @router.get("/urls")
 def get_urls_by_user(repository = Depends(get_url_repository), user_repository = Depends(get_user_repository), current_user = Depends(get_current_user)):
 
-    user = user_repository.get_user_by_email(current_user)
+    user = user_repository.get_user_by_name(current_user)
     use_case = GetUrlsByUser(repository)
 
     return use_case.execute(user.id)

@@ -7,18 +7,18 @@ def test_register_valid():
 
     repo = FakeUserRepository()
     use_case = Register(repo)
-    use_case.execute("teste@teste.com", "password")
+    use_case.execute("teste", "password")
 
-    result = repo.get_user_by_email("teste@teste.com")
+    result = repo.get_user_by_name("teste")
 
     assert result is not None
-    assert result.email == "teste@teste.com"
+    assert result.name == "teste"
 
 def test_register_invalid():
 
     repo = FakeUserRepository()
     use_case = Register(repo)
-    use_case.execute("teste@teste.com", "password")
+    use_case.execute("teste", "password")
 
     with pytest.raises(UserAlreadyExistsError):
-        use_case.execute("teste@teste.com", "password123")
+        use_case.execute("teste", "password123")

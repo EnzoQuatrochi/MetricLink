@@ -8,29 +8,29 @@ def test_login():
 
     repo = FakeUserRepository()
     register_use_case = Register(repo)
-    register_use_case.execute("teste@teste.com", "password")
+    register_use_case.execute("teste", "password")
 
     login_use_case = Login(repo)
-    token = login_use_case.execute("teste@teste.com", "password")
+    token = login_use_case.execute("teste", "password")
     
     assert token is not None
     assert isinstance(token, str)
 
-def test_invalid_email_login():
+def test_invalid_name_login():
 
     repo = FakeUserRepository()
     login_use_case = Login(repo)
 
     with pytest.raises(UserNotFoundError):
-        login_use_case.execute("nouser@teste.com", "password")
+        login_use_case.execute("nouser", "password")
 
 def test_invalid_password_login():
 
     repo = FakeUserRepository()
     register_use_case = Register(repo)
-    register_use_case.execute("teste@teste.com", "")
+    register_use_case.execute("teste", "")
 
     login_use_case = Login(repo)
 
     with pytest.raises(InvalidCredentialsError):
-        login_use_case.execute("teste@teste.com", "password")
+        login_use_case.execute("teste", "password")

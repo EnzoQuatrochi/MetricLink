@@ -46,6 +46,11 @@
     line-height: 1.4;
 }
 
+.slug-label {
+    color: #a064dd;
+    font-weight: 600;
+}
+
 .urlSidebarCard strong {
     color: var(--color-text);
 }

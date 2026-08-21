@@ -6,15 +6,19 @@ interface MetricsChartProps {
 }
 
 export default function MetricsChart({ history }: MetricsChartProps) {
+
+    const chartWidth = Math.max(600, history.length * 80)
+
     return (
         <div className='metricsChart'>
-            <LineChart width={600} height={350} data={history} margin={{ top: 40, right: 60, left: 10, bottom: 10 }}>
+            <LineChart width={chartWidth} height={350} data={history} margin={{ top: 40, right: 60, left: 0, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                     dataKey="day" 
                     tick={{ fill: '#ffffff' }} 
                     padding={{ left: 30, right: 30 }} 
                     dy={10}
+                    tickFormatter={(value) => value.slice(2)}
                     label={{ value: 'Date', position: 'insideRight', offset: -50, dy:-17, fill: '#db6969ff' }}
                 />
                 <YAxis 
@@ -22,7 +26,7 @@ export default function MetricsChart({ history }: MetricsChartProps) {
                     domain={[0, (dataMax: number) => dataMax + 1]} 
                     tick={{ fill: '#ffffff' }} 
                     dx={-10}
-                    label={{ value: 'N° Clicks', position: 'insideTop', offset: -35, dx:35, fill: '#db6969ff' }}
+                    label={{ value: 'Clicks', position: 'insideTop', offset: -35, dx:35, fill: '#db6969ff' }}
                 />
                 <Tooltip
                     contentStyle={{

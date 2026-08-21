@@ -10,9 +10,9 @@ class Login:
 
         self.repository = repository
 
-    def execute(self, email: str, password: str) -> str:
+    def execute(self, name: str, password: str) -> str:
 
-        existing = self.repository.get_user_by_email(email)
+        existing = self.repository.get_user_by_name(name)
 
         if not existing:
 
@@ -24,6 +24,6 @@ class Login:
 
             raise InvalidCredentialsError()
 
-        token = create_token(email)
+        token = create_token(name)
 
         return token

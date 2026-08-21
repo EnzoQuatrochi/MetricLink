@@ -8,11 +8,11 @@ export default function Login() {
     const navigate = useNavigate()
     const [error, setError] = useState<string | undefined>()
 
-    async function handleLogin(email: string, password: string) {
+    async function handleLogin(name: string, password: string) {
         setError(undefined)
 
-        if (!email.trim()) {
-            setError('Email não pode ser vazio.')
+        if (!name.trim()) {
+            setError('Nome não pode ser vazio.')
             return
         }
         if (!password.trim()) {
@@ -21,10 +21,10 @@ export default function Login() {
         }
 
         try {
-            const token = await loginUser(email, password)
+            const token = await loginUser(name, password)
             navigate('/home', { state: { mode: 'auth', token }, replace: true })
         } catch {
-            setError('Email ou senha incorretos.')
+            setError('Nome ou senha incorretos.')
         }
     }
 
